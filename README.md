@@ -179,15 +179,20 @@ Once v0.1.0 ships, a first cost report is a single command. Sixty seconds:
 
 Expected: `/pech-cost` prints session spend broken down by plugin × sub-plugin × agent tier × model, with an L1 end-of-month forecast and a ±2σ confidence band against your configured ceiling. Peer plugins (Wixie / Sylph / Emu) react automatically to L2 threshold events — no manual kill switch. See [docs/getting-started.md](docs/getting-started.md) for the full guided first run once the release lands.
 
-## 5 Sub-Plugins, 5 Engines, 4 Slash Commands
+## 8 Sub-Plugins, 5 Core Engines, 4 Slash Commands
+
+Five **core sub-plugins** (cost-ledger lineup) plus three **utility sub-plugins** (added 2026-05-05) covering rate-limiting, license compliance, and SBOM emission. The utility sub-plugins are advisory and operate alongside the cost-ledger pipeline rather than feeding it.
 
 | Sub-plugin | Owns | Trigger | Agent |
 |------------|------|---------|-------|
 | [cost-tracker](plugins/cost-tracker/) | L1 Exponential Smoothing + L4 Cache-Waste | hook-driven (PostToolUse) | forecaster (Sonnet) |
 | [budget-watcher](plugins/budget-watcher/) | L2 Budget Boundary + L3 Z-Score Anomaly | hook-driven (PostToolUse) | threshold-auditor (Haiku) + anomaly-triager (Opus) |
 | [rate-card-keeper](plugins/rate-card-keeper/) | rate card + staleness | hook-driven (SessionStart) | rate-card-validator (Haiku) |
-| [pech-learning](plugins/pech-learning/) | L5 Gauss Learning (Pech) | hook-driven (PreCompact) | pattern-learner (Sonnet) |
+| [nook-learning](plugins/nook-learning/) | L5 Gauss Learning (Pech) | hook-driven (PreCompact) | pattern-learner (Sonnet) |
 | [cost-query](plugins/cost-query/) | developer slash commands | skill-invoked | report-narrator (Opus) |
+| **[rate-limiter](plugins/rate-limiter/)** | Token-bucket runaway-loop detection | hook-driven (PreToolUse) | (advisory hook) |
+| **[license-gate](plugins/license-gate/)** | SPDX allow/deny scan over npm + pip dep trees | skill-invoked / CI | (advisory + `--fail-on-deny`) |
+| **[sbom-emitter](plugins/sbom-emitter/)** | CycloneDX SBOM generation (npm + pip) | release.yml workflow | (advisory) |
 
 Slash commands from `cost-query`:
 
