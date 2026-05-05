@@ -1,0 +1,17 @@
+{
+  "description": "rate-limiter hooks — token-bucket advisory check on every tool call. Advisory-only: emits stderr message when bucket empty, never blocks. Cheap pre-filter no-ops when state/buckets.json is absent (opt-in).",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${CLAUDE_PLUGIN_ROOT}/hooks/pretooluse-rate.sh",
+            "timeout": 2
+          }
+        ]
+      }
+    ]
+  }
+}

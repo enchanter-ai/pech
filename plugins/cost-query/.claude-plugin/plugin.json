@@ -3,7 +3,7 @@
   "description": "Developer-facing query surface. /pech-cost (current spend), /pech-forecast (L1 projection), /pech-attribute (break down by plugin/tier/model), /pech-report (dark-themed PDF audit with Opus anomaly narrative). Skill-invoked only — no hooks. Relies on state written by cost-tracker, budget-watcher, pech-learning.",
   "version": "0.1.0",
   "author": {
-    "name": "enchanted-plugins"
+    "name": "enchanter-ai"
   },
   "license": "MIT",
   "keywords": [

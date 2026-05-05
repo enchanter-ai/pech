@@ -7,7 +7,7 @@ Pulls in all 5 Pech sub-plugins via one dependency resolution pass.
 ## Install
 
 ```
-/plugin marketplace add enchanted-plugins/pech
+/plugin marketplace add enchanter-ai/pech
 /plugin install full@pech
 ```
 

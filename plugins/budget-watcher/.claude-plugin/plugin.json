@@ -3,7 +3,7 @@
   "description": "L2 Budget Boundary Detection + L3 Z-Score Cost Anomaly. Reads ledger rows emitted by cost-tracker, maintains per-scope counters (session/hour/day/month × agent tier × model), fires debounced threshold events at 50/80/100%. Runs 3σ anomaly detection over 30-call rolling window of matching attribution tuple.",
   "version": "0.1.0",
   "author": {
-    "name": "enchanted-plugins"
+    "name": "enchanter-ai"
   },
   "license": "MIT",
   "keywords": [

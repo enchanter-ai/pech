@@ -51,7 +51,7 @@ Nightly GitHub Actions workflow at `.github/workflows/refresh-rate-card.yml` (sh
 
 1. Scrapes Anthropic's published pricing.
 2. Diffs against `shared/rate-card.json`.
-3. On diff, opens a PR with the update, CC'ing `@enchanted-plugins/maintainers`.
+3. On diff, opens a PR with the update, CC'ing `@enchanter-ai/maintainers`.
 4. On no diff, updates `_meta.last_verified` and commits directly.
 
 Never fetches at runtime. Never caches. The JSON is authoritative.

@@ -4,16 +4,16 @@ message: "If you use this software, please cite it as below."
 type: software
 authors:
   - alias: klaiderman
-    affiliation: "enchanted-plugins"
-repository-code: "https://github.com/enchanted-plugins/pech"
-url: "https://github.com/enchanted-plugins/pech"
+    affiliation: "enchanter-ai"
+repository-code: "https://github.com/enchanter-ai/pech"
+url: "https://github.com/enchanter-ai/pech"
 license: MIT
 version: "0.1.0"
 date-released: "2026-04-20"
 abstract: "Cost tracker for AI-assisted development: per-tier attribution, honest forecasts with confidence bands, budget-boundary events, and cache-waste measurement."
 keywords:
   - claude-code
-  - enchanted-plugins
+  - enchanter-ai
   - cost-tracking
   - token-accounting
   - llm

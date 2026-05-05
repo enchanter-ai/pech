@@ -1,0 +1,19 @@
+{
+  "name": "rate-limiter",
+  "description": "Token-bucket advisory rate limiter per (session, skill). Fires on PreToolUse. Surfaces runaway tool-call loops in real time before pech/budget-watcher reports them post-hoc. Configurable per-skill via state/buckets.json. Advisory-only — never blocks.",
+  "version": "0.1.0",
+  "author": {
+    "name": "enchanted-plugins"
+  },
+  "license": "MIT",
+  "keywords": [
+    "rate-limit",
+    "token-bucket",
+    "advisory",
+    "runaway-loop",
+    "pre-tool-use"
+  ],
+  "skills": [
+    "./skills/rate-awareness/"
+  ]
+}

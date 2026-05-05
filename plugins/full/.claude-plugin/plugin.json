@@ -3,7 +3,7 @@
   "description": "Pech meta-plugin. One install pulls in all 5 Pech sub-plugins via dependency resolution: cost-tracker (L1+L4), budget-watcher (L2+L3), rate-card-keeper, pech-learning (L5), cost-query.",
   "version": "0.1.0",
   "author": {
-    "name": "enchanted-plugins"
+    "name": "enchanter-ai"
   },
   "license": "MIT",
   "keywords": [

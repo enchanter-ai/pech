@@ -13,7 +13,7 @@
   <a href="https://www.repostatus.org/#wip"><img alt="Project Status: WIP" src="https://www.repostatus.org/badges/latest/wip.svg"></a>
 </p>
 
-> **An @enchanted-plugins product — algorithm-driven, agent-managed, self-learning.**
+> **An @enchanter-ai product — algorithm-driven, agent-managed, self-learning.**
 
 The cost ledger for AI-assisted development that learns from every session.
 
@@ -70,7 +70,7 @@ Not for:
 
 Pech doesn't just track spend. It **attributes** — every token, every prompt-cache hit, every tool-use turn gets tagged with the plugin / sub-plugin / skill / agent tier / model that fired it. Then it forecasts with honest confidence bands, detects anomalies against your personal rolling mean, and publishes threshold events so peer plugins can **degrade themselves** before you hit the ceiling.
 
-The core innovation is the **attribution contract**: every enchanted-plugins sibling that dispatches work sets the `ENCHANTED_ATTRIBUTION` environment variable before the call. Pech reads it at `PostToolUse`, looks up the model in `shared/rate-card.json`, applies the prompt-cache modifiers (writes at 1.25×, reads at 0.1×, batch at 0.5×), and writes a ledger row. What Anthropic's console shows as one line of "org total" becomes thirty lines of per-plugin-per-tier-per-model reality.
+The core innovation is the **attribution contract**: every enchanter-ai sibling that dispatches work sets the `ENCHANTED_ATTRIBUTION` environment variable before the call. Pech reads it at `PostToolUse`, looks up the model in `shared/rate-card.json`, applies the prompt-cache modifiers (writes at 1.25×, reads at 0.1×, batch at 0.5×), and writes a ledger row. What Anthropic's console shows as one line of "org total" becomes thirty lines of per-plugin-per-tier-per-model reality.
 
 The diagram below shows the five-subplugin architecture: a Claude Code session flows into `cost-tracker` (L1 + L4 — the primary hook consumer), which feeds `budget-watcher` (L2 + L3 — threshold + anomaly detection) and `pech-learning` (L5 — cross-session pattern accumulation). `rate-card-keeper` holds the committed rate card; `cost-query` is the skill-invoked developer surface. Events hit the enchanted-mcp bus only on threshold crossings and rollups — peer plugins (Wixie, Sylph, Emu) subscribe and degrade gracefully.
 
@@ -153,7 +153,7 @@ Pech ships as a 5-sub-plugin marketplace. One meta-plugin — `full` — lists a
 **In Claude Code** (recommended):
 
 ```
-/plugin marketplace add enchanted-plugins/pech
+/plugin marketplace add enchanter-ai/pech
 /plugin install full@pech
 ```
 
@@ -164,7 +164,7 @@ Claude Code resolves the dependency list and installs all 5 sub-plugins. Verify 
 **Via shell** (also clones locally so `shared/scripts/*.py` are available):
 
 ```bash
-bash <(curl -s https://raw.githubusercontent.com/enchanted-plugins/pech/main/install.sh)
+bash <(curl -s https://raw.githubusercontent.com/enchanter-ai/pech/main/install.sh)
 ```
 
 ## Quickstart
@@ -218,7 +218,7 @@ Source: [docs/assets/state-flow.mmd](docs/assets/state-flow.mmd) · Regeneration
 
 ## Roadmap
 
-Tracked in [docs/ROADMAP.md](docs/ROADMAP.md) and the shared [ecosystem map](docs/ecosystem.md). For upcoming work specific to Pech, see issues tagged [roadmap](https://github.com/enchanted-plugins/pech/labels/roadmap).
+Tracked in [docs/ROADMAP.md](docs/ROADMAP.md) and the shared [ecosystem map](docs/ecosystem.md). For upcoming work specific to Pech, see issues tagged [roadmap](https://github.com/enchanter-ai/pech/labels/roadmap).
 
 ```
 plugins/cost-tracker/state/
@@ -355,7 +355,7 @@ If you use this project in research or derivative work, please cite it:
   title = {Pech},
   author = {{Klaiderman}},
   year = {2026},
-  url = {https://github.com/enchanted-plugins/pech}
+  url = {https://github.com/enchanter-ai/pech}
 }
 ```
 
@@ -377,4 +377,4 @@ See [docs/ecosystem.md § Data Flow Between Plugins](docs/ecosystem.md#data-flow
 
 ---
 
-Repo: https://github.com/enchanted-plugins/pech
+Repo: https://github.com/enchanter-ai/pech

@@ -9,7 +9,7 @@ Pech is the ecosystem's cost tracker: every AI-assisted transaction tallied, eve
 Once v0.1.0 ships:
 
 ```
-/plugin marketplace add enchanted-plugins/pech
+/plugin marketplace add enchanter-ai/pech
 /plugin install full@pech
 ```
 
@@ -39,5 +39,5 @@ Pech answers the question *"What did it cost?"* in the Five Questions model (see
 ## Until it ships
 
 - Track progress in [ROADMAP.md](ROADMAP.md).
-- Discuss design in [GitHub Discussions](https://github.com/enchanted-plugins/pech/discussions).
+- Discuss design in [GitHub Discussions](https://github.com/enchanter-ai/pech/discussions).
 - Report bugs against the planned interface only if you've read the source — the public API isn't stable yet.

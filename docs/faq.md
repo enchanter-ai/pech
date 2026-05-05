@@ -14,17 +14,17 @@ Not strictly. Pech runs standalone and tallies whatever Claude Code sessions it 
 
 - **Security vulnerability** — private advisory, never a public issue. See [SECURITY.md](../SECURITY.md).
 - **Reproducible bug** — a bug report issue with repro steps + exact versions.
-- **Usage question or half-formed idea** — [Discussions](https://github.com/enchanted-plugins/pech/discussions).
+- **Usage question or half-formed idea** — [Discussions](https://github.com/enchanter-ai/pech/discussions).
 
 The [SUPPORT.md](../SUPPORT.md) page has the exact links for each.
 
 ## Is Pech an official Anthropic product?
 
-No. Pech is an independent open-source plugin for [Claude Code](https://github.com/anthropics/claude-code) (Anthropic's CLI). It's published by [enchanted-plugins](https://github.com/enchanted-plugins) under the MIT license and is not affiliated with, endorsed by, or supported by Anthropic.
+No. Pech is an independent open-source plugin for [Claude Code](https://github.com/anthropics/claude-code) (Anthropic's CLI). It's published by [enchanter-ai](https://github.com/enchanter-ai) under the MIT license and is not affiliated with, endorsed by, or supported by Anthropic.
 
 ## Is Pech available now?
 
-No. Pech is Phase 1 #5 in the @enchanted-plugins rollout and is pre-release. The README and engine IDs (L1 Exponential Smoothing, L2 Budget Boundary, L3-L5) describe the committed public surface, but no v0.1.0 tag has shipped yet. Track progress in [docs/ROADMAP.md](ROADMAP.md) and the [ecosystem map](https://github.com/enchanted-plugins/wixie/blob/main/docs/ecosystem.md).
+No. Pech is Phase 1 #5 in the @enchanter-ai rollout and is pre-release. The README and engine IDs (L1 Exponential Smoothing, L2 Budget Boundary, L3-L5) describe the committed public surface, but no v0.1.0 tag has shipped yet. Track progress in [docs/ROADMAP.md](ROADMAP.md) and the [ecosystem map](https://github.com/enchanter-ai/wixie/blob/main/docs/ecosystem.md).
 
 ## How does Pech know the cost per agent tier if Anthropic's console doesn't?
 

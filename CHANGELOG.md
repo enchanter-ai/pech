@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [1.0.0] — rename: pech identity, standardized origin format
 
-Pech has not shipped a public release yet. The plugin is planned for Phase 1 of the @enchanted-plugins ecosystem rollout. Until the first tagged release, this file captures the docs and scaffolding landing ahead of v0.1.0.
+Pech has not shipped a public release yet. The plugin is planned for Phase 1 of the @enchanter-ai ecosystem rollout. Until the first tagged release, this file captures the docs and scaffolding landing ahead of v0.1.0.
 
 ### Added
 - Tier-1 governance docs: `SECURITY.md`, `SUPPORT.md`, `CODE_OF_CONDUCT.md`, `CHANGELOG.md`.
@@ -22,4 +22,4 @@ Pech has not shipped a public release yet. The plugin is planned for Phase 1 of 
 
 Track progress in [ROADMAP.md](docs/ROADMAP.md) and the [ecosystem map](docs/ecosystem.md).
 
-[Unreleased]: https://github.com/enchanted-plugins/pech/commits/main
+[Unreleased]: https://github.com/enchanter-ai/pech/commits/main

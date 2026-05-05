@@ -1,7 +1,7 @@
 {
   "name": "pech",
   "owner": {
-    "name": "enchanted-plugins"
+    "name": "enchanter-ai"
   },
   "metadata": {
     "description": "Cost ledger for AI-assisted development. Attributes every token, prompt-cache hit, and tool-use turn to the plugin / sub-plugin / agent tier that fired it. Forecasts spend, fires budget thresholds, surfaces cache waste. Phase 1 plugin #5.",

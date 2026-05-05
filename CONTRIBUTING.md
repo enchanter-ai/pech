@@ -1,6 +1,6 @@
 # Contributing to Pech
 
-*An @enchanted-plugins product.*
+*An @enchanter-ai product.*
 
 Thanks for your interest in contributing. Read [CLAUDE.md](CLAUDE.md) before opening your first PR — it's the binding behavioral contract for the plugin, including the non-duplication boundary with Emu (A2 owns tokens; L1 owns dollars) and the no-per-call-events rule for the enchanted-mcp bus.
 
@@ -17,7 +17,7 @@ Thanks for your interest in contributing. Read [CLAUDE.md](CLAUDE.md) before ope
 ## Dev setup
 
 ```bash
-git clone https://github.com/enchanted-plugins/pech
+git clone https://github.com/enchanter-ai/pech
 cd pech
 bash install.sh                                  # pre-flight checks, clone to ~/.claude/plugins/
 cd docs/assets && npm install                    # renderer toolchain (mmdc + puppeteer + mathjax)
@@ -29,7 +29,7 @@ cd ../../ && bash tests/run-all.sh               # smoke tests
 1. **Verify rate-card freshness.** `jq .effective_from shared/rate-card.json` — if > 60 days old, refresh via the nightly-CI PR flow.
 2. **Run the generator.** `python docs/architecture/generate.py` — regenerates the four `.mmd` diagrams + `index.html`. Commit the result.
 3. **Run the tests.** `bash tests/run-all.sh` — every sub-plugin's `tests/` dir must return zero.
-4. **Verify the conduct modules are current.** Compare against upstream (`enchanted-plugins/wixie`); if they've drifted, rebase before proceeding.
+4. **Verify the conduct modules are current.** Compare against upstream (`enchanter-ai/wixie`); if they've drifted, rebase before proceeding.
 5. **Check the non-duplication boundary.** If your change makes Pech count tokens client-side, stop and reconsider — that's Emu's A2.
 6. **Check the bus-traffic invariant.** `grep -r 'pech_publish' plugins/` — every caller must be inside a threshold-crossing or rollup-boundary code path. Per-call callers fail review.
 
@@ -49,7 +49,7 @@ Scopes: `cost-tracker`, `budget-watcher`, `rate-card-keeper`, `pech-learning`, `
 
 ## Reporting issues
 
-Open at https://github.com/enchanted-plugins/pech/issues. Include: plugin version (from `.claude-plugin/marketplace.json#metadata.version`), Claude Code version, rate-card date (`jq .effective_from shared/rate-card.json`), repro steps, expected vs. actual.
+Open at https://github.com/enchanter-ai/pech/issues. Include: plugin version (from `.claude-plugin/marketplace.json#metadata.version`), Claude Code version, rate-card date (`jq .effective_from shared/rate-card.json`), repro steps, expected vs. actual.
 
 ## Code of conduct
 
