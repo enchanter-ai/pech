@@ -72,12 +72,12 @@ Pech doesn't just track spend. It **attributes** — every token, every prompt-c
 
 The core innovation is the **attribution contract**: every enchanter-ai sibling that dispatches work sets the `ENCHANTED_ATTRIBUTION` environment variable before the call. Pech reads it at `PostToolUse`, looks up the model in `shared/rate-card.json`, applies the prompt-cache modifiers (writes at 1.25×, reads at 0.1×, batch at 0.5×), and writes a ledger row. What Anthropic's console shows as one line of "org total" becomes thirty lines of per-plugin-per-tier-per-model reality.
 
-The diagram below shows the five-subplugin architecture: a Claude Code session flows into `cost-tracker` (L1 + L4 — the primary hook consumer), which feeds `budget-watcher` (L2 + L3 — threshold + anomaly detection) and `pech-learning` (L5 — cross-session pattern accumulation). `rate-card-keeper` holds the committed rate card; `cost-query` is the skill-invoked developer surface. Events hit the enchanted-mcp bus only on threshold crossings and rollups — peer plugins (Wixie, Sylph, Emu) subscribe and degrade gracefully.
+The diagram below shows the six-subplugin architecture: a Claude Code session passes through `rate-limiter` (token-bucket runaway-loop detection at PreToolUse), then flows into `cost-tracker` (L1 + L4 — the primary PostToolUse hook consumer), which feeds `budget-watcher` (L2 + L3 — threshold + anomaly detection) and `nook-learning` (L5 — cross-session pattern accumulation). `rate-card-keeper` holds the committed rate card; `cost-query` is the skill-invoked developer surface. Events hit the enchanted-mcp bus only on threshold crossings, anomalies, rollups, and bucket-empty advisories — peer plugins (Wixie, Sylph, Emu) subscribe and degrade gracefully.
 
 <p align="center">
   <a href="docs/assets/pipeline.mmd" title="View pipeline source (Mermaid)">
     <img src="docs/assets/pipeline.svg"
-         alt="Pech five-subplugin architecture blueprint — title block, Claude Code session input, cost-tracker (L1+L4), budget-watcher (L2+L3), rate-card-keeper + pech-learning + cost-query support row, enchanted-mcp bus events, and peer-degradation legend"
+         alt="Pech six-subplugin architecture blueprint — title block, Claude Code session input, rate-limiter (token-bucket PreToolUse), cost-tracker (L1+L4), budget-watcher (L2+L3), rate-card-keeper + nook-learning + cost-query support row, enchanted-mcp bus events including pech.rate.bucket.empty, and peer-degradation legend"
          width="100%" style="max-width: 1100px;">
   </a>
 </p>
@@ -203,7 +203,7 @@ Slash commands from `cost-query`:
 
 ## What You Get Per Session
 
-Tool calls flow through four journals — one per sub-plugin — and converge on the enchanted-mcp bus (threshold + rollup events) and the developer query surface. Hook fires at the top; journals in the middle; bus + query at the bottom. The four border colors map engines to journals: yellow = rate-card-keeper · blue = cost-tracker (L1 + L4) · red = budget-watcher (L2 + L3) · purple = pech-learning (L5).
+Tool calls flow through five journals — one per state-bearing sub-plugin — and converge on the enchanted-mcp bus (threshold + anomaly + rollup + rate-bucket events) and the developer query surface. Hook fires at the top; journals in the middle; bus + query at the bottom. The five border colors map engines to journals: yellow = rate-card-keeper · coral = rate-limiter (token bucket) · blue = cost-tracker (L1 + L4) · red = budget-watcher (L2 + L3) · purple = nook-learning (L5).
 
 <p align="center">
   <a href="docs/assets/state-flow.mmd" title="View state-flow diagram source (Mermaid)">
