@@ -1,5 +1,5 @@
 ---
-title: Pech five-subplugin architecture
+title: Pech six-subplugin architecture
 config:
   look: neo
   theme: dark
@@ -14,9 +14,14 @@ config:
       bottom: 18
 ---
 flowchart TB
-    TitleBlock["<div style='font-family:ui-monospace,SFMono-Regular,Consolas,monospace;text-align:center;min-width:940px;padding:6px 10px;line-height:1.8'><div style='color:#58a6ff;font-size:15px;letter-spacing:6px;border-bottom:1px solid #1e3a5f;padding-bottom:10px;margin-bottom:10px'>PECH &nbsp;·&nbsp; COST&nbsp;LEDGER &nbsp;·&nbsp; ARCHITECTURE</div><div style='display:flex;gap:40px;justify-content:center;font-size:11px;color:#8b949e;letter-spacing:2px'><span>DWG&nbsp;&nbsp;<b style='color:#e6edf3'>PCH-001</b></span><span>REV&nbsp;&nbsp;<b style='color:#e6edf3'>A.1</b></span><span>SCALE&nbsp;&nbsp;<b style='color:#e6edf3'>1:1</b></span><span>ENGINES&nbsp;&nbsp;<b style='color:#e6edf3'>L1&nbsp;·&nbsp;L2&nbsp;·&nbsp;L3&nbsp;·&nbsp;L4&nbsp;·&nbsp;L5</b></span><span>SHEET&nbsp;&nbsp;<b style='color:#e6edf3'>01&nbsp;/&nbsp;01</b></span></div></div>"]
+    TitleBlock["<div style='font-family:ui-monospace,SFMono-Regular,Consolas,monospace;text-align:center;min-width:940px;padding:6px 10px;line-height:1.8'><div style='color:#58a6ff;font-size:15px;letter-spacing:6px;border-bottom:1px solid #1e3a5f;padding-bottom:10px;margin-bottom:10px'>PECH &nbsp;·&nbsp; COST&nbsp;LEDGER &nbsp;·&nbsp; ARCHITECTURE</div><div style='display:flex;gap:40px;justify-content:center;font-size:11px;color:#8b949e;letter-spacing:2px'><span>DWG&nbsp;&nbsp;<b style='color:#e6edf3'>PCH-001</b></span><span>REV&nbsp;&nbsp;<b style='color:#e6edf3'>B.1</b></span><span>SCALE&nbsp;&nbsp;<b style='color:#e6edf3'>1:1</b></span><span>ENGINES&nbsp;&nbsp;<b style='color:#e6edf3'>L1&nbsp;·&nbsp;L2&nbsp;·&nbsp;L3&nbsp;·&nbsp;L4&nbsp;·&nbsp;L5&nbsp;+&nbsp;TB</b></span><span>SHEET&nbsp;&nbsp;<b style='color:#e6edf3'>01&nbsp;/&nbsp;01</b></span></div></div>"]
 
-    Session(["<div style='text-align:center;line-height:1.8;padding:4px 12px'><b style='letter-spacing:1.5px'>INPUT&nbsp;·&nbsp;CLAUDE&nbsp;CODE&nbsp;SESSION</b><br/><em style='color:#8b949e;font-size:13px;font-weight:400'>PostToolUse + ENCHANTED_ATTRIBUTION env</em></div>"])
+    Session(["<div style='text-align:center;line-height:1.8;padding:4px 12px'><b style='letter-spacing:1.5px'>INPUT&nbsp;·&nbsp;CLAUDE&nbsp;CODE&nbsp;SESSION</b><br/><em style='color:#8b949e;font-size:13px;font-weight:400'>PreToolUse + PostToolUse + ENCHANTED_ATTRIBUTION env</em></div>"])
+
+    subgraph RateGate["<div style='text-align:center;min-width:940px;line-height:2'><div><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>SUB-PLUGIN&nbsp;06</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>RATE-LIMITER</b>&nbsp;&nbsp;·&nbsp;&nbsp;<span style='color:#ff7b72;letter-spacing:1px'>TB&nbsp;(token-bucket)</span></div><div style='color:#6e7681;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:1.2px'>ROLE&nbsp;·&nbsp;runaway-loop&nbsp;detection&nbsp;(advisory)&nbsp;&nbsp;·&nbsp;&nbsp;PreToolUse&nbsp;hook&nbsp;&nbsp;·&nbsp;&nbsp;τ&nbsp;&lt;&nbsp;30ms/call</div></div>"]
+        direction LR
+        bucket["<div style='text-align:center;line-height:1.7;padding:2px 4px'>READ<br/>BUCKET&nbsp;STATE<br/><small style='color:#6e7681;letter-spacing:1px'>per&nbsp;(session,&nbsp;skill)</small></div>"] --> refill["<div style='text-align:center;line-height:1.7;padding:2px 4px'>REFILL<br/>BY&nbsp;ELAPSED<br/><small style='color:#6e7681;letter-spacing:1px'>cap&nbsp;at&nbsp;capacity</small></div>"] --> consume["<div style='text-align:center;line-height:1.7;padding:2px 4px'>CONSUME<br/>1&nbsp;TOKEN<br/><small style='color:#6e7681;letter-spacing:1px'>empty&nbsp;⇒&nbsp;advisory</small></div>"] --> persist["<div style='text-align:center;line-height:1.7;padding:2px 4px'>LOCKED&nbsp;WRITE<br/>buckets.json<br/><small style='color:#6e7681;letter-spacing:1px'>fcntl&nbsp;/&nbsp;msvcrt</small></div>"]
+    end
 
     subgraph Observe["<div style='text-align:center;min-width:940px;line-height:2'><div><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>SUB-PLUGIN&nbsp;01</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>COST-TRACKER</b>&nbsp;&nbsp;·&nbsp;&nbsp;<span style='color:#58a6ff;letter-spacing:1px'>L1&nbsp;+&nbsp;L4</span></div><div style='color:#6e7681;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:1.2px'>ROLE&nbsp;·&nbsp;primary&nbsp;hook&nbsp;consumer&nbsp;&nbsp;·&nbsp;&nbsp;τ&nbsp;&lt;&nbsp;3s/call&nbsp;&nbsp;·&nbsp;&nbsp;forecaster&nbsp;=&nbsp;Sonnet</div></div>"]
         direction LR
@@ -28,23 +33,25 @@ flowchart TB
         counters["<div style='text-align:center;line-height:1.7;padding:2px 4px'>UPDATE<br/>COUNTERS<br/><small style='color:#6e7681;letter-spacing:1px'>session·hour·day·month</small></div>"] --> threshold["<div style='text-align:center;line-height:1.7;padding:2px 4px'>L2&nbsp;THRESHOLD<br/>DETECT<br/><small style='color:#6e7681;letter-spacing:1px'>debounced&nbsp;per&nbsp;window</small></div>"] --> anomaly["<div style='text-align:center;line-height:1.7;padding:2px 4px'>L3&nbsp;Z-SCORE<br/>ANOMALY<br/><small style='color:#6e7681;letter-spacing:1px'>spike&nbsp;+&nbsp;drop</small></div>"]
     end
 
-    subgraph Support["<div style='text-align:center;min-width:940px;line-height:2'><div><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>SUB-PLUGINS&nbsp;03&nbsp;·&nbsp;04&nbsp;·&nbsp;05</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>RATE-CARD·KEEPER&nbsp;&nbsp;·&nbsp;&nbsp;PECH-LEARNING&nbsp;&nbsp;·&nbsp;&nbsp;COST-QUERY</b>&nbsp;&nbsp;·&nbsp;&nbsp;<span style='color:#bc8cff;letter-spacing:1px'>validators&nbsp;&amp;&nbsp;surfaces</span></div><div style='color:#6e7681;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:1.2px'>rate-card.json&nbsp;committed&nbsp;&nbsp;·&nbsp;&nbsp;L5&nbsp;α=0.05&nbsp;slow&nbsp;accumulator&nbsp;&nbsp;·&nbsp;&nbsp;/pech-{cost,forecast,attribute,report}</div></div>"]
+    subgraph Support["<div style='text-align:center;min-width:940px;line-height:2'><div><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>SUB-PLUGINS&nbsp;03&nbsp;·&nbsp;04&nbsp;·&nbsp;05</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>RATE-CARD·KEEPER&nbsp;&nbsp;·&nbsp;&nbsp;NOOK-LEARNING&nbsp;&nbsp;·&nbsp;&nbsp;COST-QUERY</b>&nbsp;&nbsp;·&nbsp;&nbsp;<span style='color:#bc8cff;letter-spacing:1px'>validators&nbsp;&amp;&nbsp;surfaces</span></div><div style='color:#6e7681;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:1.2px'>rate-card.json&nbsp;committed&nbsp;&nbsp;·&nbsp;&nbsp;L5&nbsp;α=0.05&nbsp;slow&nbsp;accumulator&nbsp;&nbsp;·&nbsp;&nbsp;/pech-{cost,forecast,attribute,report}</div></div>"]
         direction LR
-        ratecard["<div style='text-align:center;line-height:1.7;padding:2px 4px'>RATE-CARD<br/>KEEPER<br/><small style='color:#6e7681;letter-spacing:1px'>SessionStart&nbsp;load</small></div>"] --> learn["<div style='text-align:center;line-height:1.7;padding:2px 4px'>PECH<br/>LEARNING&nbsp;(L5)<br/><small style='color:#6e7681;letter-spacing:1px'>PreCompact&nbsp;persist</small></div>"] --> query["<div style='text-align:center;line-height:1.7;padding:2px 4px'>COST<br/>QUERY<br/><small style='color:#6e7681;letter-spacing:1px'>skill-invoked&nbsp;only</small></div>"]
+        ratecard["<div style='text-align:center;line-height:1.7;padding:2px 4px'>RATE-CARD<br/>KEEPER<br/><small style='color:#6e7681;letter-spacing:1px'>SessionStart&nbsp;load</small></div>"] --> learn["<div style='text-align:center;line-height:1.7;padding:2px 4px'>NOOK<br/>LEARNING&nbsp;(L5)<br/><small style='color:#6e7681;letter-spacing:1px'>PreCompact&nbsp;persist</small></div>"] --> query["<div style='text-align:center;line-height:1.7;padding:2px 4px'>COST<br/>QUERY<br/><small style='color:#6e7681;letter-spacing:1px'>skill-invoked&nbsp;only</small></div>"]
     end
 
     subgraph Bus["<div style='text-align:center;min-width:940px;line-height:2'><div><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>OUTPUT&nbsp;·&nbsp;ENCHANTED-MCP&nbsp;BUS</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>THRESHOLD&nbsp;+&nbsp;ROLLUP&nbsp;EVENTS&nbsp;ONLY</b></div><div style='color:#6e7681;font-size:11px;font-family:ui-monospace,monospace;letter-spacing:1.2px'>never&nbsp;per&nbsp;call&nbsp;&nbsp;·&nbsp;&nbsp;pech_publish&nbsp;rate-limits&nbsp;per&nbsp;event-type</div></div>"]
         direction LR
-        evt1["<div style='text-align:center;line-height:1.7;padding:2px 4px'>pech.budget.<br/>threshold.crossed<br/><small style='color:#6e7681;letter-spacing:1px'>50/80/100%</small></div>"] --> evt2["<div style='text-align:center;line-height:1.7;padding:2px 4px'>pech.anomaly.<br/>detected<br/><small style='color:#6e7681;letter-spacing:1px'>|z|&nbsp;&gt;&nbsp;3</small></div>"] --> evt3["<div style='text-align:center;line-height:1.7;padding:2px 4px'>pech.session.<br/>cost.finalized<br/><small style='color:#6e7681;letter-spacing:1px'>at&nbsp;Stop</small></div>"]
+        evt1["<div style='text-align:center;line-height:1.7;padding:2px 4px'>pech.budget.<br/>threshold.crossed<br/><small style='color:#6e7681;letter-spacing:1px'>50/80/100%</small></div>"] --> evt2["<div style='text-align:center;line-height:1.7;padding:2px 4px'>pech.anomaly.<br/>detected<br/><small style='color:#6e7681;letter-spacing:1px'>|z|&nbsp;&gt;&nbsp;3</small></div>"] --> evt3["<div style='text-align:center;line-height:1.7;padding:2px 4px'>pech.session.<br/>cost.finalized<br/><small style='color:#6e7681;letter-spacing:1px'>at&nbsp;Stop</small></div>"] --> evt4["<div style='text-align:center;line-height:1.7;padding:2px 4px'>pech.rate.<br/>bucket.empty<br/><small style='color:#6e7681;letter-spacing:1px'>runaway&nbsp;loop&nbsp;hint</small></div>"]
     end
 
     Peers["<div style='text-align:center;min-width:940px;line-height:1.8;padding:6px 10px'><b style='letter-spacing:1.5px;color:#79c0ff'>PEER&nbsp;PLUGINS&nbsp;DEGRADE&nbsp;GRACEFULLY</b><br/><em style='color:#8b949e;font-size:13px;font-weight:400'>Wixie → Haiku for validators &nbsp;·&nbsp; Sylph → defer PR polish &nbsp;·&nbsp; Emu → trim context aggressively</em></div>"]
 
-    Session --> Observe
+    Session --> RateGate
+    RateGate --> Observe
     Observe --> Guard
     Observe --> Support
     Guard --> Bus
     Support --> Bus
+    RateGate --> Bus
     Bus --> Peers
 
     classDef titleBlock fill:#06111f,stroke:#1e3a5f,stroke-width:1px,color:#e6edf3,rx:4,ry:4
@@ -55,6 +62,7 @@ flowchart TB
     class Session session
     class Peers peers
 
+    style RateGate fill:#0f1d33,stroke:#ff7b72,stroke-width:2px,color:#e6edf3,rx:12,ry:12
     style Observe fill:#0f1d33,stroke:#58a6ff,stroke-width:2px,color:#e6edf3,rx:12,ry:12
     style Guard fill:#0f1d33,stroke:#d75952,stroke-width:2px,color:#e6edf3,rx:12,ry:12
     style Support fill:#0f1d33,stroke:#bc8cff,stroke-width:2px,color:#e6edf3,rx:12,ry:12

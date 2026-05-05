@@ -14,11 +14,12 @@ config:
       bottom: 18
 ---
 flowchart TB
-    TitleBlock["<div style='font-family:ui-monospace,SFMono-Regular,Consolas,monospace;text-align:center;min-width:940px;padding:6px 10px;line-height:1.8'><div style='color:#58a6ff;font-size:15px;letter-spacing:6px;border-bottom:1px solid #1e3a5f;padding-bottom:10px;margin-bottom:10px'>PECH &nbsp;·&nbsp; STATE&nbsp;FLOW &nbsp;·&nbsp; LEDGER&nbsp;JOURNALS</div><div style='display:flex;gap:40px;justify-content:center;font-size:11px;color:#8b949e;letter-spacing:2px'><span>DWG&nbsp;&nbsp;<b style='color:#e6edf3'>PCH-003</b></span><span>REV&nbsp;&nbsp;<b style='color:#e6edf3'>A.1</b></span><span>SCALE&nbsp;&nbsp;<b style='color:#e6edf3'>1:1</b></span><span>JOURNALS&nbsp;&nbsp;<b style='color:#e6edf3'>n&nbsp;=&nbsp;4</b></span><span>SHEET&nbsp;&nbsp;<b style='color:#e6edf3'>01&nbsp;/&nbsp;01</b></span></div></div>"]
+    TitleBlock["<div style='font-family:ui-monospace,SFMono-Regular,Consolas,monospace;text-align:center;min-width:940px;padding:6px 10px;line-height:1.8'><div style='color:#58a6ff;font-size:15px;letter-spacing:6px;border-bottom:1px solid #1e3a5f;padding-bottom:10px;margin-bottom:10px'>PECH &nbsp;·&nbsp; STATE&nbsp;FLOW &nbsp;·&nbsp; LEDGER&nbsp;JOURNALS</div><div style='display:flex;gap:40px;justify-content:center;font-size:11px;color:#8b949e;letter-spacing:2px'><span>DWG&nbsp;&nbsp;<b style='color:#e6edf3'>PCH-003</b></span><span>REV&nbsp;&nbsp;<b style='color:#e6edf3'>B.1</b></span><span>SCALE&nbsp;&nbsp;<b style='color:#e6edf3'>1:1</b></span><span>JOURNALS&nbsp;&nbsp;<b style='color:#e6edf3'>n&nbsp;=&nbsp;5</b></span><span>SHEET&nbsp;&nbsp;<b style='color:#e6edf3'>01&nbsp;/&nbsp;01</b></span></div></div>"]
 
     subgraph sources["<div style='text-align:center;min-width:940px;font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>EVENT&nbsp;SOURCES&nbsp;&nbsp;·&nbsp;&nbsp;HOOK&nbsp;FIRES</div>"]
         direction LR
         SessionStart["<b>SessionStart</b>"]
+        PreTool["<b>PreToolUse</b><br/><small style='color:#6e7681'>rate-limiter</small>"]
         PostTool["<b>PostToolUse</b><br/><small style='color:#6e7681'>any tool</small>"]
         PreCompact["<b>PreCompact</b>"]
         Stop["<b>Stop</b>"]
@@ -28,14 +29,18 @@ flowchart TB
         rc_card["<div style='text-align:center;line-height:1.7'><code>rate-card.json</code><br/><small style='color:#6e7681'>per-model rates · cache modifiers · batch discount · effective_from</small></div>"]
     end
 
-    subgraph ct["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;02</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>cost-tracker / state /</b></div>"]
+    subgraph rl["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;02</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>rate-limiter / state /</b></div>"]
+        rl_buckets["<div style='text-align:center;line-height:1.7'><code>buckets.json</code><br/><small style='color:#6e7681'>token-bucket per (session, skill) · capacity + refill_per_sec · locked write</small></div>"]
+    end
+
+    subgraph ct["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;03</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>cost-tracker / state /</b></div>"]
         direction LR
         ct_ledger["<div style='text-align:center;line-height:1.7'><code>ledger-YYYY-MM.jsonl</code><br/><small style='color:#6e7681'>per-call rows · full attribution tuple · L1 + L4</small></div>"]
         ct_session["<div style='text-align:center;line-height:1.7'><code>session.json</code><br/><small style='color:#6e7681'>current session snapshot · status-line</small></div>"]
         ct_rollup["<div style='text-align:center;line-height:1.7'><code>rollups / daily-YYYY-MM-DD.json</code><br/><small style='color:#6e7681'>pre-aggregated · forever retention</small></div>"]
     end
 
-    subgraph bw["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;03</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>budget-watcher / state /</b></div>"]
+    subgraph bw["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;04</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>budget-watcher / state /</b></div>"]
         direction LR
         bw_budgets["<div style='text-align:center;line-height:1.7'><code>budgets.json</code><br/><small style='color:#6e7681'>per-scope ceilings · developer config</small></div>"]
         bw_counters["<div style='text-align:center;line-height:1.7'><code>counters.json</code><br/><small style='color:#6e7681'>running totals · session·hour·day·month</small></div>"]
@@ -43,17 +48,18 @@ flowchart TB
         bw_anomaly["<div style='text-align:center;line-height:1.7'><code>anomalies.jsonl</code><br/><small style='color:#6e7681'>L3 Z-score detections · spike + drop</small></div>"]
     end
 
-    subgraph nl["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;04</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>pech-learning / state / &nbsp;·&nbsp; shared /</b></div>"]
+    subgraph nl["<div style='text-align:center;min-width:940px;line-height:2'><span style='font-family:ui-monospace,monospace;color:#8b949e;font-size:11px;letter-spacing:3px'>JOURNAL&nbsp;05</span>&nbsp;&nbsp;·&nbsp;&nbsp;<b style='letter-spacing:2px'>nook-learning / state / &nbsp;·&nbsp; shared /</b></div>"]
         direction LR
         nl_learn["<div style='text-align:center;line-height:1.7'><code>learnings.json</code><br/><small style='color:#6e7681'>L5 Gauss · α=0.05 accumulator · per (plugin, skill, tier)</small></div>"]
         nl_shared["<div style='text-align:center;line-height:1.7'><code>shared / learnings.json</code><br/><small style='color:#6e7681'>cross-plugin exported patterns</small></div>"]
     end
 
-    Bus["<div style='text-align:center;line-height:1.8;padding:4px 12px'><b style='letter-spacing:1.5px;color:#79c0ff'>ENCHANTED-MCP&nbsp;BUS</b><br/><em style='color:#8b949e;font-size:12px'>pech.budget.threshold.crossed · pech.anomaly.detected · pech.session.cost.finalized</em></div>"]
+    Bus["<div style='text-align:center;line-height:1.8;padding:4px 12px'><b style='letter-spacing:1.5px;color:#79c0ff'>ENCHANTED-MCP&nbsp;BUS</b><br/><em style='color:#8b949e;font-size:12px'>pech.budget.threshold.crossed · pech.anomaly.detected · pech.session.cost.finalized · pech.rate.bucket.empty</em></div>"]
     Query(["<b>/pech-report · /pech-cost · /pech-forecast</b><br/><small style='color:#8b949e'>skill-invoked pull surface</small>"])
 
     TitleBlock ~~~ sources
     SessionStart --> rc_card
+    PreTool --> rl_buckets
     PostTool --> ct_ledger
     ct_ledger --> ct_session
     ct_ledger --> bw_counters
@@ -61,6 +67,7 @@ flowchart TB
     bw_counters --> bw_anomaly
     bw_threshold --> Bus
     bw_anomaly --> Bus
+    rl_buckets --> Bus
     PreCompact --> nl_learn
     nl_learn --> nl_shared
     Stop --> ct_rollup
@@ -70,6 +77,7 @@ flowchart TB
     bw_threshold --> Query
     bw_anomaly --> Query
     nl_learn --> Query
+    rl_buckets --> Query
 
     classDef titleBlock fill:#06111f,stroke:#1e3a5f,stroke-width:1px,color:#e6edf3,rx:4,ry:4
     classDef sourceNode fill:#0a1628,stroke:#1e3a5f,stroke-width:1.5px,color:#e6edf3,rx:8,ry:8
@@ -78,12 +86,13 @@ flowchart TB
     classDef queryNode fill:#0f1d33,stroke:#3fb950,stroke-width:1.5px,color:#3fb950,rx:14,ry:14
 
     class TitleBlock titleBlock
-    class SessionStart,PostTool,PreCompact,Stop sourceNode
-    class rc_card,ct_ledger,ct_session,ct_rollup,bw_budgets,bw_counters,bw_threshold,bw_anomaly,nl_learn,nl_shared journalLine
+    class SessionStart,PreTool,PostTool,PreCompact,Stop sourceNode
+    class rc_card,rl_buckets,ct_ledger,ct_session,ct_rollup,bw_budgets,bw_counters,bw_threshold,bw_anomaly,nl_learn,nl_shared journalLine
     class Bus busNode
     class Query queryNode
 
     style rc fill:#0f1d33,stroke:#d29922,stroke-width:2px,color:#e6edf3,rx:12,ry:12
+    style rl fill:#0f1d33,stroke:#ff7b72,stroke-width:2px,color:#e6edf3,rx:12,ry:12
     style ct fill:#0f1d33,stroke:#58a6ff,stroke-width:2px,color:#e6edf3,rx:12,ry:12
     style bw fill:#0f1d33,stroke:#d75952,stroke-width:2px,color:#e6edf3,rx:12,ry:12
     style nl fill:#0f1d33,stroke:#bc8cff,stroke-width:2px,color:#e6edf3,rx:12,ry:12
