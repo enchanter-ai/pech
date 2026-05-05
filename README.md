@@ -208,7 +208,7 @@ Tool calls flow through five journals — one per state-bearing sub-plugin — a
 <p align="center">
   <a href="docs/assets/state-flow.mmd" title="View state-flow diagram source (Mermaid)">
     <img src="docs/assets/state-flow.svg"
-         alt="Pech per-session state flow: four hook events (SessionStart, PostToolUse, PreCompact, Stop) feed four color-coded journals (rate-card-keeper/shared/rate-card.json, cost-tracker/state/ledger+session+rollups, budget-watcher/state/budgets+counters+thresholds+anomalies, pech-learning/state/learnings + shared/learnings.json), which converge on the enchanted-mcp bus and the /pech-{cost,forecast,report} query surface"
+         alt="Pech per-session state flow: five hook events (SessionStart, PreToolUse, PostToolUse, PreCompact, Stop) feed five color-coded journals (rate-card-keeper/shared/rate-card.json, rate-limiter/state/buckets.json, cost-tracker/state/ledger+session+rollups, budget-watcher/state/budgets+counters+thresholds+anomalies, nook-learning/state/learnings + shared/learnings.json), which converge on the enchanted-mcp bus (threshold/anomaly/rollup/rate-bucket events) and the /pech-{cost,forecast,report} query surface"
          width="100%" style="max-width:1100px;">
   </a>
 </p>
@@ -236,8 +236,11 @@ plugins/budget-watcher/state/
 ├── thresholds.jsonl          Debounce state + audit trail of every crossing
 └── anomalies.jsonl           L3 detection log
 
-plugins/pech-learning/state/
+plugins/nook-learning/state/
 └── learnings.json            Per-developer patterns (α=0.05 accumulated)
+
+plugins/rate-limiter/state/
+└── buckets.json              Per (session, skill) token bucket — runaway-loop advisory
 
 shared/
 ├── rate-card.json            Per-model rates + modifiers (committed, CI-refreshed)
