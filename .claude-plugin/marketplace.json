@@ -49,18 +49,6 @@
       "source": "./plugins/rate-limiter",
       "description": "Token-bucket advisory rate limiter per skill+session. PreToolUse hook surfaces runaway tool-call loops in real time before budget-watcher catches them post-hoc. Configurable per-skill capacity via state/buckets.json.",
       "category": "cost-control"
-    },
-    {
-      "name": "license-gate",
-      "source": "./plugins/license-gate",
-      "description": "License compliance scanner over npm + pip dep trees against an allow/deny SPDX policy. Flags GPL/AGPL/SSPL as denied, MPL/EPL/CDDL as warned, MIT/Apache/BSD/ISC as allowed. CI-mode supports --fail-on-deny.",
-      "category": "compliance"
-    },
-    {
-      "name": "sbom-emitter",
-      "source": "./plugins/sbom-emitter",
-      "description": "Generates CycloneDX SBOM (bom-npm.cdx.json / bom-pip.cdx.json) by detecting npm or pip ecosystem and shelling out to the matching tool. Wired into release.yml. Closes CISA SBOM / EU CRA 2027 procurement gap.",
-      "category": "compliance"
     }
   ]
 }
