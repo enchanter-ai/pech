@@ -27,7 +27,7 @@ the policy file and the relevant bucket entry.
 </purpose>
 
 <override_note>
-This shield exists as an explicit override of shared/conduct/hooks.md
+This shield exists as an explicit override of shared/foundations/conduct/hooks.md
 "Hooks inform, they don't decide". The override is documented in this
 plugin's README and is permitted by wixie/CLAUDE.md: "When a module
 conflicts with a plugin-local instruction, the plugin wins — but log
@@ -90,6 +90,6 @@ IF developer wants to disable the shield:
 **Recent block:** &lt;ts&gt; — tokens reached 0.0
 
 The shield is opt-in blocking; advisory velocity signals live in
-pech-rate-limiter. Override of shared/conduct/hooks.md is logged in this
+pech-rate-limiter. Override of shared/foundations/conduct/hooks.md is logged in this
 plugin's README.
 </output_format>

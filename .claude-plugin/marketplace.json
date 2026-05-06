@@ -49,6 +49,12 @@
       "source": "./plugins/rate-limiter",
       "description": "Token-bucket advisory rate limiter per skill+session. PreToolUse hook surfaces runaway tool-call loops in real time before budget-watcher catches them post-hoc. Configurable per-skill capacity via state/buckets.json.",
       "category": "cost-control"
+    },
+    {
+      "name": "rate-shield",
+      "source": "./plugins/rate-shield",
+      "description": "Opt-in PreToolUse blocking token-bucket rate limiter. Sibling of rate-limiter (advisory). When state/rate-policy.json sets enabled:true, blocks tool calls whose (session, skill) bucket is empty. Reads buckets from rate-limiter when present; gracefully degrades when absent. Default disabled. Closes F-013.",
+      "category": "cost-control"
     }
   ]
 }
