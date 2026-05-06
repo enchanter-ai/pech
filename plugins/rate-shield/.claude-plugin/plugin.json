@@ -1,0 +1,20 @@
+{
+  "name": "pech-rate-shield",
+  "description": "OPT-IN BLOCKING token-bucket rate limiter. Sibling of pech-rate-limiter (advisory). When state/rate-policy.json sets enabled:true, this shield blocks (exits 2) any tool call when the active (session, skill) bucket is empty. Reads buckets from rate-limiter's state/buckets.json when present; gracefully degrades when absent. Default disabled.",
+  "version": "0.1.0",
+  "author": {
+    "name": "enchanter-ai"
+  },
+  "license": "MIT",
+  "keywords": [
+    "rate-limit",
+    "token-bucket",
+    "blocking",
+    "runaway-loop",
+    "pre-tool-use",
+    "f-013"
+  ],
+  "skills": [
+    "./skills/shield-awareness/"
+  ]
+}

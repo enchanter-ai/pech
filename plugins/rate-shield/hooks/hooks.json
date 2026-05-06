@@ -1,0 +1,17 @@
+{
+  "description": "pech rate-shield: OPT-IN BLOCKING token-bucket rate limiter on every tool call. Exits 2 (block) when the active (session, skill) bucket is empty and policy.enabled is true. Default disabled.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks/pretooluse.sh\"",
+            "timeout": 3
+          }
+        ]
+      }
+    ]
+  }
+}
