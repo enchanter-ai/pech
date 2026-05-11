@@ -10,7 +10,7 @@
 
 `rate-limiter` is **observability** (advisory, always exits 0, prints to
 stderr when a bucket empties). It conforms to
-`shared/foundations/conduct/hooks.md` "Hooks inform, they don't decide". Operators
+`../enchanter-foundations/packages/core/conduct/hooks.md` "Hooks inform, they don't decide". Operators
 who want enforcement, not just signal, install **this** plugin in
 addition to (or instead of) the limiter.
 
@@ -42,7 +42,7 @@ plugin) drive the **decrement** semantics, while the sibling's
 ## hooks.md override (logged)
 
 This plugin **overrides** the project-wide rule in
-`shared/foundations/conduct/hooks.md` that hooks must be advisory-only. The override
+`../enchanter-foundations/packages/core/conduct/hooks.md` that hooks must be advisory-only. The override
 is bounded:
 
 1. **Off by default.** Disabled `state/rate-policy.json` ships out of
@@ -122,6 +122,6 @@ plugins/rate-shield/
 - [`rate-limiter`](../rate-limiter) — advisory sibling (observability
   only); this shield reads its `state/buckets.json` when present.
 - [`budget-watcher`](../budget-watcher) — post-hoc cost ceilings.
-- `shared/foundations/conduct/hooks.md` — advisory-default rule (overridden here,
+- `../enchanter-foundations/packages/core/conduct/hooks.md` — advisory-default rule (overridden here,
   per the override-note above).
 - F-013 (rate-limit enforcement) — closed by this plugin.

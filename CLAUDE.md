@@ -6,19 +6,19 @@ Audience: Claude. Pech is the cost ledger for AI-assisted development — attrib
 
 These apply to every skill in every plugin. Load once; do not re-derive.
 
-- @shared/foundations/conduct/discipline.md — coding conduct: think-first, simplicity, surgical edits, goal-driven loops
-- @shared/foundations/conduct/context.md — attention-budget hygiene, U-curve placement, checkpoint protocol
-- @shared/foundations/conduct/verification.md — independent checks, baseline snapshots, dry-run for destructive ops
-- @shared/foundations/conduct/doubt-engine.md — adversarial self-check before agreement; counter to F01 sycophancy; fires on user proposals AND your own prior framing
-- @shared/foundations/conduct/delegation.md — subagent contracts, tool whitelisting, parallel vs. serial rules
-- @shared/foundations/conduct/failure-modes.md — 14-code taxonomy for accumulated-learning logs
-- @shared/foundations/conduct/tool-use.md — tool-choice hygiene, error payload contract, parallel-dispatch rules
-- @shared/foundations/conduct/formatting.md — per-target format (XML/Markdown/minimal/few-shot), prefill + stop sequences
-- @shared/foundations/conduct/skill-authoring.md — SKILL.md frontmatter discipline, discovery test
-- @shared/foundations/conduct/hooks.md — advisory-only hooks, injection over denial, fail-open
-- @shared/foundations/conduct/precedent.md — log self-observed failures to `state/precedent-log.md`; consult before risky steps
-- @shared/foundations/conduct/tier-sizing.md — prompt verbosity scales inversely with model tier; Haiku needs mechanical steps, Opus runs on intent
-- @shared/foundations/conduct/web-fetch.md — external URL handling: cache, dedup, budget; WebFetch is Haiku-tier-only
+- @../enchanter-foundations/packages/core/conduct/discipline.md — coding conduct: think-first, simplicity, surgical edits, goal-driven loops
+- @../enchanter-foundations/packages/core/conduct/context.md — attention-budget hygiene, U-curve placement, checkpoint protocol
+- @../enchanter-foundations/packages/core/conduct/verification.md — independent checks, baseline snapshots, dry-run for destructive ops
+- @../enchanter-foundations/packages/core/conduct/doubt-engine.md — adversarial self-check before agreement; counter to F01 sycophancy; fires on user proposals AND your own prior framing
+- @../enchanter-foundations/packages/core/conduct/delegation.md — subagent contracts, tool whitelisting, parallel vs. serial rules
+- @../enchanter-foundations/packages/core/conduct/failure-modes.md — 14-code taxonomy for accumulated-learning logs
+- @../enchanter-foundations/packages/core/conduct/tool-use.md — tool-choice hygiene, error payload contract, parallel-dispatch rules
+- @../enchanter-foundations/packages/skills/conduct/formatting.md — per-target format (XML/Markdown/minimal/few-shot), prefill + stop sequences
+- @../enchanter-foundations/packages/skills/conduct/skill-authoring.md — SKILL.md frontmatter discipline, discovery test
+- @../enchanter-foundations/packages/core/conduct/hooks.md — advisory-only hooks, injection over denial, fail-open
+- @../enchanter-foundations/packages/core/conduct/precedent.md — log self-observed failures to `state/precedent-log.md`; consult before risky steps
+- @../enchanter-foundations/packages/core/conduct/tier-sizing.md — prompt verbosity scales inversely with model tier; Haiku needs mechanical steps, Opus runs on intent
+- @../enchanter-foundations/packages/web/conduct/web-fetch.md — external URL handling: cache, dedup, budget; WebFetch is Haiku-tier-only
 
 When a module conflicts with a plugin-local instruction, the plugin wins — but log the override.
 
@@ -85,7 +85,7 @@ Markers: **[H]** hook-enforced (deterministic) · **[A]** advisory (relies on yo
 | `plugins/budget-watcher/state/thresholds.jsonl` | budget-watcher | Log of threshold crossings (for debounce state + audit) |
 | `plugins/rate-card-keeper/state/rate-card.json` | rate-card-keeper | Per-model rates + modifiers + effective dates |
 | `plugins/pech-learning/state/learnings.json` | pech-learning | Per-developer spend patterns (L5 Gauss Accumulation) |
-| `plugins/<name>/state/precedent-log.md` | all | Self-observed operational failures (see @shared/foundations/conduct/precedent.md) |
+| `plugins/<name>/state/precedent-log.md` | all | Self-observed operational failures (see @../enchanter-foundations/packages/core/conduct/precedent.md) |
 | `shared/learnings.json` | exporter | Cross-plugin aggregated learnings |
 
 ## Agent tiers

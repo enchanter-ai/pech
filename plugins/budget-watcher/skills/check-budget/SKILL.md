@@ -48,6 +48,6 @@ Downstream subscribers: Wixie (switches to cheaper model on 80%+ crossings), Syl
 
 | Code | Scenario | Counter |
 |------|----------|---------|
-| F09 | Two hooks writing `counters.json` concurrently | Use `@shared/foundations/conduct/tool-use.md` § atomic write pattern (write-to-tmp + fsync + rename) |
+| F09 | Two hooks writing `counters.json` concurrently | Use `@../enchanter-foundations/packages/core/conduct/tool-use.md` § atomic write pattern (write-to-tmp + fsync + rename) |
 | F05 | Emit threshold event repeatedly on every call past the ceiling | Debounce in `thresholds.jsonl` is mandatory — read it first |
 | F13 | Counter inflation from stale session.json on multi-developer/shared state | `session_id` from `ENCHANTED_ATTRIBUTION` scopes the counter; never share |

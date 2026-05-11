@@ -7,7 +7,7 @@ Advisory token-bucket rate limiter per `(session, skill)`. Fires on
 before `budget-watcher` reports the cost post-hoc.
 
 **Advisory-only contract.** This plugin never blocks. Bucket empty → one
-stderr line; the tool call proceeds. Per `shared/foundations/conduct/hooks.md`.
+stderr line; the tool call proceeds. Per `../enchanter-foundations/packages/core/conduct/hooks.md`.
 
 ## How it works
 
