@@ -1,5 +1,5 @@
 {
-  "description": "cost-tracker hooks — observe every tool call, write ledger row, update rollups. Advisory-only per @shared/foundations/conduct/hooks.md: never blocks, never exit-non-zero, fails open.",
+  "description": "cost-tracker hooks — observe every tool call, write ledger row, update rollups. Advisory-only per @shared/vis/conduct/hooks.md: never blocks, never exit-non-zero, fails open.",
   "hooks": {
     "SessionStart": [
       {

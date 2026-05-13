@@ -38,9 +38,9 @@ tools: [Read, Write, Bash]
    - `output_cost = output_tokens × rate.output_rate_per_mtok / 1e6`
    - Apply `rate.batch_discount` if this call was batched.
 5. Append row to `state/ledger-YYYY-MM.jsonl` with all tags + costs + timestamp.
-6. Update `state/session.json` in-place (atomic rename via `@../foundations/packages/core/conduct/verification.md` § Dry-run pattern — write to `.tmp`, fsync, rename).
+6. Update `state/session.json` in-place (atomic rename via `@../vis/packages/core/conduct/verification.md` § Dry-run pattern — write to `.tmp`, fsync, rename).
 
-**Success criterion:** ledger row written, session.json updated, zero stdout pollution (`@../foundations/packages/core/conduct/hooks.md` § Logging from hooks — log to `state/observe.log`, not stdout).
+**Success criterion:** ledger row written, session.json updated, zero stdout pollution (`@../vis/packages/core/conduct/hooks.md` § Logging from hooks — log to `state/observe.log`, not stdout).
 
 ## Outputs
 

@@ -33,7 +33,7 @@ tools: [Read, Write]
    - Summarize changes: `{model, field, old_value, new_value, pct_change}`.
 3. If any price changes by > 20% in either direction, flag as `suspicious_change` — require explicit confirmation before writing. Anthropic pricing historically moves by ≤ 10% per change.
 4. Append the current card to `state/rate-card-history.jsonl` (audit trail of all prior cards).
-5. Write the new card to `shared/rate-card.json` via atomic temp-rename (@../foundations/packages/core/conduct/verification.md § dry-run pattern).
+5. Write the new card to `shared/rate-card.json` via atomic temp-rename (@../vis/packages/core/conduct/verification.md § dry-run pattern).
 6. Set `_meta.last_verified` to today.
 7. Emit `pech.rate_card.refreshed` with the diff summary.
 

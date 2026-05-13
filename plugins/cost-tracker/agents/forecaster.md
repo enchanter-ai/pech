@@ -49,4 +49,4 @@ See [../../../CLAUDE.md](../../../CLAUDE.md) § Agent tiers.
 
 ## Failure handling
 
-If the agent reports a forecast without `sigma` > 0, the parent must reject it — zero-variance forecasts are either a single-observation series (set `insufficient_data: true`) or a computation bug. See [@../foundations/packages/core/conduct/delegation.md](../../../../foundations/packages/core/conduct/delegation.md) § Trust but verify.
+If the agent reports a forecast without `sigma` > 0, the parent must reject it — zero-variance forecasts are either a single-observation series (set `insufficient_data: true`) or a computation bug. See [@../vis/packages/core/conduct/delegation.md](../../../../vis/packages/core/conduct/delegation.md) § Trust but verify.

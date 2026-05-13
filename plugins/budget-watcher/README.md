@@ -58,6 +58,6 @@ Debounce state lives in `state/thresholds.jsonl` — append-only so we can audit
 
 ## Brand invariants
 
-- Events fire on crossings + rollups only — never per call (see `@../foundations/packages/core/conduct/hooks.md`).
+- Events fire on crossings + rollups only — never per call (see `@../vis/packages/core/conduct/hooks.md`).
 - Debounce is mandatory: N calls past threshold produce one event, not N.
 - Orphan rate is a first-class health signal, not a hidden bucket.

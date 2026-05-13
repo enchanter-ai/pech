@@ -15,7 +15,7 @@ tools: [Read, Bash]
 Token-bucket advisory limiter. Each tool call consumes one token from a per
 (session, skill) bucket. When the bucket is empty, an advisory is emitted to
 stderr — the tool still proceeds (advisory-only contract per
-`../foundations/packages/core/conduct/hooks.md`).
+`../vis/packages/core/conduct/hooks.md`).
 
 ## Preconditions
 

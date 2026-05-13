@@ -41,6 +41,6 @@ Pech's primary hook consumer. Observes every tool call, attributes spend to the 
 
 ## Brand invariants
 
-- Bus emission on `Stop` only, never per-call (see `@../foundations/packages/core/conduct/hooks.md` + Pech CLAUDE.md § Behavioral contract 3).
+- Bus emission on `Stop` only, never per-call (see `@../vis/packages/core/conduct/hooks.md` + Pech CLAUDE.md § Behavioral contract 3).
 - Never re-tokenize client-side — API `usage` field is authoritative; Emu's A2 is the fallback estimate.
 - Per-agent-tier attribution is load-bearing; orphan rate surfaced as health metric.

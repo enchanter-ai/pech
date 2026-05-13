@@ -31,7 +31,7 @@ def log(msg: str) -> None:
         with open(OBSERVE_LOG, "a", encoding="utf-8") as f:
             f.write(f"[{datetime.now(timezone.utc).isoformat()}] {msg}\n")
     except Exception:
-        pass  # fail-open per @shared/foundations/conduct/hooks.md
+        pass  # fail-open per @shared/vis/conduct/hooks.md
 
 
 def load_rate_card() -> dict:
@@ -119,7 +119,7 @@ def ledger_path() -> Path:
 
 
 def atomic_append(path: Path, line: str) -> bool:
-    """Append a line to a file. Per @shared/foundations/conduct/tool-use.md § Bash hygiene, do it safely."""
+    """Append a line to a file. Per @shared/vis/conduct/tool-use.md § Bash hygiene, do it safely."""
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         with open(path, "a", encoding="utf-8") as f:

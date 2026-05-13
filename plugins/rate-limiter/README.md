@@ -7,7 +7,7 @@ Advisory token-bucket rate limiter per `(session, skill)`. Fires on
 before `budget-watcher` reports the cost post-hoc.
 
 **Advisory-only contract.** This plugin never blocks. Bucket empty → one
-stderr line; the tool call proceeds. Per `../foundations/packages/core/conduct/hooks.md`.
+stderr line; the tool call proceeds. Per `../vis/packages/core/conduct/hooks.md`.
 
 ## How it works
 
