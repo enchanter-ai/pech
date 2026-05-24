@@ -6,7 +6,7 @@
 
 <p>
   <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-3fb950?style=for-the-badge"></a>
-  <img alt="5 plugins" src="https://img.shields.io/badge/Plugins-5-bc8cff?style=for-the-badge">
+  <img alt="7 plugins" src="https://img.shields.io/badge/Plugins-7-bc8cff?style=for-the-badge">
   <img alt="5 engines" src="https://img.shields.io/badge/Engines-L1%E2%80%93L5-58a6ff?style=for-the-badge">
   <img alt="Phase 1 #5" src="https://img.shields.io/badge/Phase-1%20%23%205-d29922?style=for-the-badge">
   <img alt="Exponential Smoothing" src="https://img.shields.io/badge/Exponential-Smoothing-f0883e?style=for-the-badge">
@@ -17,7 +17,7 @@
 
 The cost ledger for AI-assisted development that learns from every session.
 
-**5 sub-plugins. 5 engines. Per-tier attribution. Event-bus peer degradation. One command.**
+**7 sub-plugins + 1 meta. 5 engines. Per-tier attribution. Event-bus peer degradation. One command.**
 
 > You just ran `/converge` on a Sonnet-heavy prompt. Pech saw 47 calls: Opus orchestrator ($0.06), Sonnet executor over 40 iterations ($2.12), Haiku validator ($0.003). L1 forecast projected end-of-month at $48.20 with ±$3 band against your $50 ceiling. At 80% of the session budget, L2 fired `pech.budget.threshold.crossed` — Wixie read the event and dropped `/converge` to Haiku for the next round; Sylph deferred PR polish. L3 flagged iteration 32 as a 3.8σ spike over your rolling mean, cache-hit ratio had fallen from 78% to 12% mid-loop. L5 remembered.
 >
@@ -53,7 +53,7 @@ Not for:
 - [The Full Lifecycle](#the-full-lifecycle)
 - [Install](#install)
 - [Quickstart](#quickstart)
-- [5 Sub-Plugins, 5 Engines, 4 Slash Commands](#5-sub-plugins-5-engines-4-slash-commands)
+- [7 Sub-Plugins, 5 Engines, 4 Slash Commands](#7-sub-plugins-5-engines-4-slash-commands)
 - [What You Get Per Session](#what-you-get-per-session)
 - [Roadmap](#roadmap)
 - [The Science Behind Pech](#the-science-behind-pech)
@@ -72,7 +72,7 @@ Pech doesn't just track spend. It **attributes** — every token, every prompt-c
 
 The core innovation is the **attribution contract**: every enchanter-ai sibling that dispatches work sets the `ENCHANTED_ATTRIBUTION` environment variable before the call. Pech reads it at `PostToolUse`, looks up the model in `shared/rate-card.json`, applies the prompt-cache modifiers (writes at 1.25×, reads at 0.1×, batch at 0.5×), and writes a ledger row. What Anthropic's console shows as one line of "org total" becomes thirty lines of per-plugin-per-tier-per-model reality.
 
-The diagram below shows the six-subplugin architecture: a Claude Code session passes through `rate-limiter` (token-bucket runaway-loop detection at PreToolUse), then flows into `cost-tracker` (L1 + L4 — the primary PostToolUse hook consumer), which feeds `budget-watcher` (L2 + L3 — threshold + anomaly detection) and `nook-learning` (L5 — cross-session pattern accumulation). `rate-card-keeper` holds the committed rate card; `cost-query` is the skill-invoked developer surface. Events hit the enchanted-mcp bus only on threshold crossings, anomalies, rollups, and bucket-empty advisories — peer plugins (Wixie, Sylph, Emu) subscribe and degrade gracefully.
+The diagram below shows the core six-subplugin architecture (the opt-in `rate-shield` blocking limiter is not pictured): a Claude Code session passes through `rate-limiter` (token-bucket runaway-loop detection at PreToolUse), then flows into `cost-tracker` (L1 + L4 — the primary PostToolUse hook consumer), which feeds `budget-watcher` (L2 + L3 — threshold + anomaly detection) and `nook-learning` (L5 — cross-session pattern accumulation). `rate-card-keeper` holds the committed rate card; `cost-query` is the skill-invoked developer surface. Events hit the enchanted-mcp bus only on threshold crossings, anomalies, rollups, and bucket-empty advisories — peer plugins (Wixie, Sylph, Emu) subscribe and degrade gracefully.
 
 <p align="center">
   <a href="docs/assets/pipeline.mmd" title="View pipeline source (Mermaid)">
@@ -148,7 +148,7 @@ Every stage is autonomous; the developer surface is pull, not push.
 
 ## Install
 
-Pech ships as a 5-sub-plugin marketplace. One meta-plugin — `full` — lists all five as dependencies, so a single install pulls in the whole chain.
+Pech ships as a 7-sub-plugin marketplace (8 directories under `plugins/` total: 7 sub-plugins + 1 meta-plugin). The meta-plugin — `full` — lists all seven sub-plugins as dependencies, so a single install pulls in the whole chain.
 
 **In Claude Code** (recommended):
 
@@ -157,7 +157,7 @@ Pech ships as a 5-sub-plugin marketplace. One meta-plugin — `full` — lists a
 /plugin install full@pech
 ```
 
-Claude Code resolves the dependency list and installs all 5 sub-plugins. Verify with `/plugin list`.
+Claude Code resolves the dependency list and installs all 7 sub-plugins. Verify with `/plugin list`.
 
 **Want to cherry-pick?** Individual sub-plugins are still installable — e.g. `/plugin install cost-tracker@pech` if you only want the ledger and no threshold alerts. Missing sub-plugins degrade gracefully (cost-query without cost-tracker shows "no observations yet"; budget-watcher without rate-card-keeper refuses to observe).
 
@@ -176,9 +176,9 @@ cd pech
 ```
 
 Without `./scripts/bootstrap.sh`, conduct imports will silently miss and Claude Code's `@`-loader will fail-soft. Always bootstrap first.
-## 6 Sub-Plugins, 5 Core Engines, 4 Slash Commands
+## 7 Sub-Plugins, 5 Core Engines, 4 Slash Commands
 
-Five **core sub-plugins** (cost-ledger lineup) plus one **cost-control utility** (`rate-limiter`, added 2026-05-05) for runaway-loop detection. License compliance (`license-gate`) and SBOM emission (`sbom-emitter`) live in [hydra](https://github.com/enchanter-ai/hydra) — they are supply-chain / compliance concerns, not cost.
+Five **core sub-plugins** (cost-ledger lineup) plus two **cost-control utilities** (`rate-limiter`, advisory; `rate-shield`, opt-in blocking) for runaway-loop detection and enforcement. License compliance (`license-gate`) and SBOM emission (`sbom-emitter`) live in [hydra](https://github.com/enchanter-ai/hydra) — they are supply-chain / compliance concerns, not cost. The `full` meta-plugin (8th `plugins/` directory) is not a sub-plugin — it is a one-install dependency aggregator.
 
 | Sub-plugin | Owns | Trigger | Agent |
 |------------|------|---------|-------|
@@ -187,7 +187,8 @@ Five **core sub-plugins** (cost-ledger lineup) plus one **cost-control utility**
 | [rate-card-keeper](plugins/rate-card-keeper/) | rate card + staleness | hook-driven (SessionStart) | rate-card-validator (Haiku) |
 | [nook-learning](plugins/nook-learning/) | L5 Gauss Learning (Pech) | hook-driven (PreCompact) | pattern-learner (Sonnet) |
 | [cost-query](plugins/cost-query/) | developer slash commands | skill-invoked | report-narrator (Opus) |
-| **[rate-limiter](plugins/rate-limiter/)** | Token-bucket runaway-loop detection | hook-driven (PreToolUse) | (advisory hook) |
+| **[rate-limiter](plugins/rate-limiter/)** | Token-bucket runaway-loop detection (advisory) | hook-driven (PreToolUse) | (advisory hook) |
+| **[rate-shield](plugins/rate-shield/)** | Opt-in PreToolUse blocking token-bucket rate limiter | hook-driven (PreToolUse) | (blocking hook, default disabled) |
 
 Slash commands from `cost-query`:
 
