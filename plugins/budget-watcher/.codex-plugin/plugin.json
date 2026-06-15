@@ -1,0 +1,32 @@
+{
+  "name": "budget-watcher",
+  "version": "0.1.0",
+  "description": "L2 Budget Boundary Detection + L3 Z-Score Cost Anomaly. Reads ledger rows emitted by cost-tracker, maintains per-scope counters (session/hour/day/month \u00d7 agent tier \u00d7 model), fires debounced threshold events at 50/80/100%. Runs 3\u03c3 anomaly detection over 30-call rolling window of matching attribution tuple.",
+  "author": {
+    "name": "Enchanter Labs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "budget",
+    "thresholds",
+    "anomaly-detection",
+    "z-score",
+    "event-bus"
+  ],
+  "interface": {
+    "displayName": "Budget Watcher",
+    "shortDescription": "L2 Budget Boundary Detection + L3 Z-Score Cost Anomaly. Reads ledger rows emitt\u2026",
+    "longDescription": "L2 Budget Boundary Detection + L3 Z-Score Cost Anomaly. Reads ledger rows emitted by cost-tracker, maintains per-scope counters (session/hour/day/month \u00d7 agent tier \u00d7 model), fires debounced threshold events at 50/80/100%. Runs 3\u03c3 anomaly detection over 30-call rolling window of matching attribution tuple.",
+    "developerName": "Enchanter Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Budget Watcher on my project"
+    ]
+  },
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

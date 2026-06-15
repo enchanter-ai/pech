@@ -1,0 +1,31 @@
+{
+  "name": "rate-limiter",
+  "version": "0.1.0",
+  "description": "Token-bucket advisory rate limiter per (session, skill). Fires on PreToolUse. Surfaces runaway tool-call loops in real time before pech/budget-watcher reports them post-hoc. Configurable per-skill via state/buckets.json. Advisory-only \u2014 never blocks.",
+  "author": {
+    "name": "Enchanter Labs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "rate-limit",
+    "token-bucket",
+    "advisory",
+    "runaway-loop",
+    "pre-tool-use"
+  ],
+  "interface": {
+    "displayName": "Rate Limiter",
+    "shortDescription": "Token-bucket advisory rate limiter per (session, skill). Fires on PreToolUse. S\u2026",
+    "longDescription": "Token-bucket advisory rate limiter per (session, skill). Fires on PreToolUse. Surfaces runaway tool-call loops in real time before pech/budget-watcher reports them post-hoc. Configurable per-skill via state/buckets.json. Advisory-only \u2014 never blocks.",
+    "developerName": "Enchanter Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Rate Limiter on my project"
+    ]
+  },
+  "skills": "./skills/"
+}

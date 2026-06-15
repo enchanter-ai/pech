@@ -1,0 +1,104 @@
+{
+  "name": "pech",
+  "interface": {
+    "displayName": "Pech"
+  },
+  "plugins": [
+    {
+      "name": "budget-watcher",
+      "source": {
+        "source": "local",
+        "path": "./plugins/budget-watcher"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "cost-query",
+      "source": {
+        "source": "local",
+        "path": "./plugins/cost-query"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "cost-tracker",
+      "source": {
+        "source": "local",
+        "path": "./plugins/cost-tracker"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "full",
+      "source": {
+        "source": "local",
+        "path": "./plugins/full"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "nook-learning",
+      "source": {
+        "source": "local",
+        "path": "./plugins/nook-learning"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "rate-card-keeper",
+      "source": {
+        "source": "local",
+        "path": "./plugins/rate-card-keeper"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "rate-limiter",
+      "source": {
+        "source": "local",
+        "path": "./plugins/rate-limiter"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "rate-shield",
+      "source": {
+        "source": "local",
+        "path": "./plugins/rate-shield"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

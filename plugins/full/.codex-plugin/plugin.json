@@ -1,0 +1,28 @@
+{
+  "name": "full",
+  "version": "0.1.0",
+  "description": "Pech meta-plugin. One install pulls in all 5 Pech sub-plugins via dependency resolution: cost-tracker (L1+L4), budget-watcher (L2+L3), rate-card-keeper, pech-learning (L5), cost-query.",
+  "author": {
+    "name": "Enchanter Labs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "meta-plugin",
+    "cost-tracking",
+    "full-install"
+  ],
+  "interface": {
+    "displayName": "Full",
+    "shortDescription": "Pech meta-plugin. One install pulls in all 5 Pech sub-plugins via dependency re\u2026",
+    "longDescription": "Pech meta-plugin. One install pulls in all 5 Pech sub-plugins via dependency resolution: cost-tracker (L1+L4), budget-watcher (L2+L3), rate-card-keeper, pech-learning (L5), cost-query.",
+    "developerName": "Enchanter Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Full on my project"
+    ]
+  }
+}

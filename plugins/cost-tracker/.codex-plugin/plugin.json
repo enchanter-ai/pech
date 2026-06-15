@@ -1,0 +1,32 @@
+{
+  "name": "cost-tracker",
+  "version": "0.1.0",
+  "description": "L1 Exponential Smoothing Forecast + L4 Cache-Waste Measurement. Reads Claude API usage field at PostToolUse, attributes via ENCHANTED_ATTRIBUTION env, writes monthly JSONL ledger. Forecasts session/day/month spend with \u00b12\u03c3 confidence bands. Surfaces cache hit ratio + unread-write waste.",
+  "author": {
+    "name": "Enchanter Labs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "cost-tracking",
+    "observability",
+    "exponential-smoothing",
+    "prompt-cache",
+    "attribution",
+    "ledger"
+  ],
+  "interface": {
+    "displayName": "Cost Tracker",
+    "shortDescription": "L1 Exponential Smoothing Forecast + L4 Cache-Waste Measurement. Reads Claude AP\u2026",
+    "longDescription": "L1 Exponential Smoothing Forecast + L4 Cache-Waste Measurement. Reads Claude API usage field at PostToolUse, attributes via ENCHANTED_ATTRIBUTION env, writes monthly JSONL ledger. Forecasts session/day/month spend with \u00b12\u03c3 confidence bands. Surfaces cache hit ratio + unread-write waste.",
+    "developerName": "Enchanter Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Cost Tracker on my project"
+    ]
+  },
+  "skills": "./skills/"
+}

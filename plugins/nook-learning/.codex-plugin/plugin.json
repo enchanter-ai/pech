@@ -1,0 +1,30 @@
+{
+  "name": "nook-learning",
+  "version": "0.1.0",
+  "description": "L5 Gauss Learning (Pech). Per-developer spend-pattern accumulation across sessions. Builds weighted moving averages of cost-per-(skill, session_type, model) so anomaly detection has meaningful \u03bc after the first 30 calls. Emu-A4 atomic serialization. Exports to shared/learnings.json for cross-plugin intelligence.",
+  "author": {
+    "name": "Enchanter Labs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "gauss-accumulation",
+    "per-developer-learning",
+    "spend-patterns",
+    "atomic-serialization"
+  ],
+  "interface": {
+    "displayName": "Nook Learning",
+    "shortDescription": "L5 Gauss Learning (Pech). Per-developer spend-pattern accumulation across sessi\u2026",
+    "longDescription": "L5 Gauss Learning (Pech). Per-developer spend-pattern accumulation across sessions. Builds weighted moving averages of cost-per-(skill, session_type, model) so anomaly detection has meaningful \u03bc after the first 30 calls. Emu-A4 atomic serialization. Exports to shared/learnings.json for cross-plugin intelligence.",
+    "developerName": "Enchanter Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Nook Learning on my project"
+    ]
+  },
+  "skills": "./skills/"
+}

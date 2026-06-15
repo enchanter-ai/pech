@@ -1,0 +1,30 @@
+{
+  "name": "rate-card-keeper",
+  "version": "0.1.0",
+  "description": "Holds the committed rate-card.json (per-model input/output rates, prompt-cache write 1.25\u00d7 modifier, cache read 0.1\u00d7 modifier, batch 0.5\u00d7 discount). Validates schema on SessionStart. Fires staleness warning if effective_from > 90 days old. Nightly CI refresh via GitHub Actions PR \u2014 never fetched at runtime.",
+  "author": {
+    "name": "Enchanter Labs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "rate-card",
+    "pricing",
+    "staleness",
+    "schema-validation"
+  ],
+  "interface": {
+    "displayName": "Rate Card Keeper",
+    "shortDescription": "Holds the committed rate-card.json (per-model input/output rates, prompt-cache\u2026",
+    "longDescription": "Holds the committed rate-card.json (per-model input/output rates, prompt-cache write 1.25\u00d7 modifier, cache read 0.1\u00d7 modifier, batch 0.5\u00d7 discount). Validates schema on SessionStart. Fires staleness warning if effective_from > 90 days old. Nightly CI refresh via GitHub Actions PR \u2014 never fetched at runtime.",
+    "developerName": "Enchanter Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Rate Card Keeper on my project"
+    ]
+  },
+  "skills": "./skills/"
+}

@@ -1,0 +1,30 @@
+{
+  "name": "cost-query",
+  "version": "0.1.0",
+  "description": "Developer-facing query surface. /pech-cost (current spend), /pech-forecast (L1 projection), /pech-attribute (break down by plugin/tier/model), /pech-report (dark-themed PDF audit with Opus anomaly narrative). Skill-invoked only \u2014 no hooks. Relies on state written by cost-tracker, budget-watcher, pech-learning.",
+  "author": {
+    "name": "Enchanter Labs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "slash-commands",
+    "developer-ux",
+    "reporting",
+    "pdf-audit"
+  ],
+  "interface": {
+    "displayName": "Cost Query",
+    "shortDescription": "Developer-facing query surface. /pech-cost (current spend), /pech-forecast (L1\u2026",
+    "longDescription": "Developer-facing query surface. /pech-cost (current spend), /pech-forecast (L1 projection), /pech-attribute (break down by plugin/tier/model), /pech-report (dark-themed PDF audit with Opus anomaly narrative). Skill-invoked only \u2014 no hooks. Relies on state written by cost-tracker, budget-watcher, pech-learning.",
+    "developerName": "Enchanter Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Cost Query on my project"
+    ]
+  },
+  "skills": "./skills/"
+}

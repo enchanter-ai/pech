@@ -1,0 +1,32 @@
+{
+  "name": "rate-shield",
+  "version": "0.1.0",
+  "description": "OPT-IN BLOCKING token-bucket rate limiter. Sibling of pech-rate-limiter (advisory). When state/rate-policy.json sets enabled:true, this shield blocks (exits 2) any tool call when the active (session, skill) bucket is empty. Reads buckets from rate-limiter's state/buckets.json when present; gracefully degrades when absent. Default disabled.",
+  "author": {
+    "name": "Enchanter Labs"
+  },
+  "license": "MIT",
+  "keywords": [
+    "rate-limit",
+    "token-bucket",
+    "blocking",
+    "runaway-loop",
+    "pre-tool-use",
+    "f-013"
+  ],
+  "interface": {
+    "displayName": "Rate Shield",
+    "shortDescription": "OPT-IN BLOCKING token-bucket rate limiter. Sibling of pech-rate-limiter (adviso\u2026",
+    "longDescription": "OPT-IN BLOCKING token-bucket rate limiter. Sibling of pech-rate-limiter (advisory). When state/rate-policy.json sets enabled:true, this shield blocks (exits 2) any tool call when the active (session, skill) bucket is empty. Reads buckets from rate-limiter's state/buckets.json when present; gracefully degrades when absent. Default disabled.",
+    "developerName": "Enchanter Labs",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use Rate Shield on my project"
+    ]
+  },
+  "skills": "./skills/"
+}
