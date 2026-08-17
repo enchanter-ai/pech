@@ -111,11 +111,19 @@ def _publish_anomaly(entry: dict, tup: dict) -> None:
             "z_score": entry.get("z_score"),
             "detected_at": entry.get("timestamp"),
         }, separators=(",", ":"))
-        subprocess.run(
+        result = subprocess.run(
             [sys.executable, str(publish_py)],
             input=payload, text=True, timeout=5,
             capture_output=True,
         )
+        # subprocess.run does NOT raise on a missing script or non-zero exit, so a
+        # broken publisher path would otherwise fail completely silently. Surface it.
+        if result.returncode != 0:
+            print(
+                f"[pech:detect_anomaly] publish exited {result.returncode} "
+                f"(publisher={publish_py.name}): {result.stderr.strip()}",
+                file=sys.stderr,
+            )
     except Exception as exc:
         print(f"[pech:detect_anomaly] publish failed (non-fatal): {exc}", file=sys.stderr)
 

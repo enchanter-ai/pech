@@ -221,11 +221,19 @@ def _publish_event(event: dict, publish_py: Path) -> None:
             "budget": event.get("ceiling_usd"),
             "crossed_at": datetime.now(timezone.utc).isoformat(),
         }, separators=(",", ":"))
-        subprocess.run(
+        result = subprocess.run(
             [sys.executable, str(publish_py)],
             input=payload, text=True, timeout=5,
             capture_output=True,
         )
+        # subprocess.run does NOT raise on a missing script or non-zero exit, so a
+        # broken publisher path would otherwise fail completely silently. Surface it.
+        if result.returncode != 0:
+            print(
+                f"[pech:check_budget] publish exited {result.returncode} "
+                f"(publisher={publish_py.name}): {result.stderr.strip()}",
+                file=sys.stderr,
+            )
     except Exception as exc:
         print(f"[pech:check_budget] publish failed (non-fatal): {exc}", file=sys.stderr)
 
