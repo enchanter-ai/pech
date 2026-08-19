@@ -2,8 +2,16 @@
 """
 observe.py — Pech's PostToolUse hook entry point.
 
-Reads the hook payload from stdin (Claude Code's hook contract), parses the API response's
-usage field, looks up the rate, applies prompt-cache modifiers, and appends a ledger row.
+Reads the hook payload from stdin (Claude Code's hook contract), recovers the API
+response's token usage from the session transcript, looks up the rate, applies
+prompt-cache modifiers, and appends a ledger row.
+
+Why the transcript and not the hook payload directly: PostToolUse's own payload
+(`tool_response`) carries the tool's result, not the model's token usage — there is
+no per-call usage field on that event. The transcript JSONL is the authoritative
+source: each assistant turn is one line with `message.id`, `message.usage`, and a
+`content[]` array of blocks that includes the `tool_use` block(s) issued in that
+turn. See docs/adr/0001-telemetry-source.md for the full decision record.
 
 Stdlib only — no external deps per brand invariant.
 """
@@ -13,6 +21,7 @@ import os
 import sys
 import time
 import uuid
+from collections import deque
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -22,6 +31,17 @@ LEDGER_DIR = PECH_ROOT / "plugins" / "cost-tracker" / "state"
 SESSION_FILE = LEDGER_DIR / "session.json"
 RATE_CARD_FILE = PECH_ROOT / "shared" / "rate-card.json"
 OBSERVE_LOG = LEDGER_DIR / "observe.log"
+
+# Dedup store: persists which assistant-turn message.ids have already been billed,
+# across hook invocations (each PostToolUse fires a fresh process — see
+# docs/adr/0001-telemetry-source.md § split policy).
+DEDUP_STORE_FILE = LEDGER_DIR / "seen-message-ids.json"
+DEDUP_LOCK_FILE = LEDGER_DIR / "seen-message-ids.lock"
+DEDUP_STORE_CAP = 2000  # rotate: keep only the most recently seen N message.ids
+
+# Bounded tail scan: how far back into the transcript we'll look for the tool_use
+# id. Keeps extract_usage() inside the hook's 2-3s budget on large transcripts.
+TRANSCRIPT_TAIL_LINES = 200
 
 
 def log(msg: str) -> None:
@@ -56,16 +76,143 @@ def parse_attribution() -> dict:
         return {}
 
 
-def extract_usage(hook_payload: dict) -> dict:
-    """Walk the hook payload to find the API response's usage field.
+def _read_transcript_tail(transcript_path: str, max_lines: int = TRANSCRIPT_TAIL_LINES) -> list:
+    """Read up to the last `max_lines` lines of the transcript JSONL.
 
-    Claude Code hook payload shape varies by tool. The usage field lives at:
-      hook_payload["tool_response"]["usage"]  (for model-invoking tools)
+    A bounded deque keeps this O(max_lines) in memory and time regardless of how
+    long the transcript has grown — required to stay inside the hook's timeout.
+    Returns [] on any failure (missing file, permission error, etc.) — never raises.
     """
     try:
-        return hook_payload.get("tool_response", {}).get("usage", {}) or {}
+        path = Path(transcript_path)
+        if not transcript_path or not path.is_file():
+            return []
+        with open(path, encoding="utf-8") as f:
+            return list(deque(f, maxlen=max_lines))
+    except Exception as e:
+        log(f"transcript read failed: {e}")
+        return []
+
+
+def extract_usage(hook_payload: dict) -> tuple:
+    """Recover the issuing turn's token usage from the transcript.
+
+    Reads `transcript_path` and the tool_use id off the hook payload, then scans the
+    transcript tail (bounded, from the end — see TRANSCRIPT_TAIL_LINES) for the
+    assistant line whose `message.content[]` contains a `tool_use` block with
+    `id == tool_use_id`. That line's `message.usage` is the turn's real token usage;
+    `message.id` is the turn identifier the dedup layer keys off of.
+
+    Returns (usage: dict, message_id: str | None). On any miss — no transcript_path,
+    no tool_use id, unreadable file, or the id isn't found within the bounded
+    window — returns ({}, None). This is a valid "uncosted" outcome, not an error:
+    the caller writes a zero-usage ledger row and moves on (LOCKED DESIGN point 4).
+    """
+    transcript_path = hook_payload.get("transcript_path", "")
+    tool_use_id = hook_payload.get("tool_use_id", "")
+    if not transcript_path or not tool_use_id:
+        return {}, None
+
+    lines = _read_transcript_tail(transcript_path)
+    for line in reversed(lines):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            entry = json.loads(line)
+        except Exception:
+            continue
+        if entry.get("type") != "assistant":
+            continue
+        message = entry.get("message") or {}
+        content = message.get("content") or []
+        for block in content:
+            if isinstance(block, dict) and block.get("type") == "tool_use" and block.get("id") == tool_use_id:
+                usage = message.get("usage") or {}
+                message_id = message.get("id")
+                return usage, message_id
+
+    return {}, None
+
+
+def _acquire_dedup_lock(timeout: float = 0.5, poll: float = 0.02) -> bool:
+    """Best-effort mutual exclusion for the read-modify-write on the dedup store.
+
+    Each hook invocation is a fresh process, so concurrent PostToolUse calls for
+    tool_use blocks in the same assistant turn can race on the dedup store. A plain
+    exclusive-create lockfile closes that window in the common case. Fails open on
+    timeout (returns False) — callers proceed without the lock rather than hang past
+    the hook's 2-3s budget; a missed lock means, at worst, a rare double-bill, never
+    a crash or a hang.
+    """
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        try:
+            fd = os.open(DEDUP_LOCK_FILE, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+            os.close(fd)
+            return True
+        except FileExistsError:
+            time.sleep(poll)
+        except Exception:
+            return False
+    return False
+
+
+def _release_dedup_lock() -> None:
+    try:
+        DEDUP_LOCK_FILE.unlink(missing_ok=True)
     except Exception:
-        return {}
+        pass
+
+
+def _load_seen_message_ids() -> list:
+    try:
+        with open(DEDUP_STORE_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+        return [i for i in data.get("ids", []) if isinstance(i, str)]
+    except Exception:
+        return []
+
+
+def _save_seen_message_ids(ids: list) -> None:
+    try:
+        DEDUP_STORE_FILE.parent.mkdir(parents=True, exist_ok=True)
+        capped = ids[-DEDUP_STORE_CAP:]  # rotate: drop the oldest once over the cap
+        tmp = DEDUP_STORE_FILE.with_suffix(".json.tmp")
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump({"ids": capped}, f)
+        os.replace(tmp, DEDUP_STORE_FILE)
+    except Exception as e:
+        log(f"dedup store write failed: {e}")
+
+
+def claim_message_id(message_id: str) -> bool:
+    """Split policy: first-call-gets-full-turn-cost (LOCKED DESIGN point 2).
+
+    Returns True the first time `message_id` is claimed (caller bills the full turn
+    usage) and False on every subsequent claim for the same id (caller must zero the
+    usage — an earlier PostToolUse in this turn already billed it). A falsy
+    message_id (transcript lookup missed) is treated as unclaimable and always
+    returns True — there's nothing to dedup against.
+
+    Fails open: if the store can't be locked/read/written, treats the id as unseen
+    (bills it) rather than silently dropping cost. A rare double-count is a smaller
+    honest-numbers violation than a rare silent undercount.
+    """
+    if not message_id:
+        return True
+
+    locked = _acquire_dedup_lock()
+    try:
+        seen = _load_seen_message_ids()
+        if message_id in seen:
+            return False
+        seen.append(message_id)
+        _save_seen_message_ids(seen)
+        return True
+    finally:
+        if locked:
+            _release_dedup_lock()
 
 
 def compute_cost(usage: dict, rate_card: dict, model: str, is_batch: bool = False) -> dict:
@@ -160,15 +307,20 @@ def main() -> int:
     except Exception:
         payload = {}
 
-    usage = extract_usage(payload)
-    if not usage:
-        # No API call in this hook event (e.g. PostToolUse for Bash without a model round-trip).
+    if not payload:
+        # No hook event on stdin at all (e.g. a manual/interactive invocation) — nothing to record.
         return 0  # fail-open
+
+    usage, message_id = extract_usage(payload)
+    if message_id and not claim_message_id(message_id):
+        # This turn's usage was already billed by an earlier tool_use in the same
+        # turn (LOCKED DESIGN point 2). Still record the call for call-count, at zero cost.
+        usage = {}
 
     attribution = parse_attribution()
     orphan = not attribution
 
-    model = attribution.get("model", usage.get("model", "unknown"))
+    model = attribution.get("model", "unknown")
     is_batch = attribution.get("is_batch", False)
 
     rate_card = load_rate_card()
