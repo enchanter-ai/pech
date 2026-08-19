@@ -128,7 +128,9 @@ def extract_usage(hook_payload: dict) -> tuple:
         content = message.get("content") or []
         for block in content:
             if isinstance(block, dict) and block.get("type") == "tool_use" and block.get("id") == tool_use_id:
-                usage = message.get("usage") or {}
+                usage = message.get("usage")
+                if not isinstance(usage, dict):
+                    usage = {}  # JSON-valid but malformed usage (e.g. a list) — treat as uncosted, never crash compute_cost
                 message_id = message.get("id")
                 return usage, message_id
 
