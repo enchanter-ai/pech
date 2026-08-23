@@ -17,11 +17,23 @@
 
 The cost ledger for AI-assisted development that learns from every session.
 
-**7 sub-plugins + 1 meta. 5 engines. Per-tier attribution. Event-bus peer degradation. One command.**
+**7 sub-plugins + 1 meta. 5 engines. Real $-metering today. Per-tier attribution and event-bus peer degradation designed, not yet wired — see [Implementation status](#implementation-status-read-this-before-the-pitch-below).**
 
-> You just ran `/converge` on a Sonnet-heavy prompt. Pech saw 47 calls: Opus orchestrator ($0.06), Sonnet executor over 40 iterations ($2.12), Haiku validator ($0.003). L1 forecast projected end-of-month at $48.20 with ±$3 band against your $50 ceiling. At 80% of the session budget, L2 fired `pech.budget.threshold.crossed` — Wixie read the event and dropped `/converge` to Haiku for the next round; Sylph deferred PR polish. L3 flagged iteration 32 as a 3.8σ spike over your rolling mean, cache-hit ratio had fallen from 78% to 12% mid-loop. L5 remembered.
+> Illustrative target scenario, not current behavior (attribution/bus/learning are unwired — see status section): you just ran `/converge` on a Sonnet-heavy prompt. Pech saw 47 calls: Opus orchestrator ($0.06), Sonnet executor over 40 iterations ($2.12), Haiku validator ($0.003). L1 forecast projected end-of-month at $48.20 with ±$3 band against your $50 ceiling. At 80% of the session budget, L2 fired `pech.budget.threshold.crossed` — Wixie read the event and dropped `/converge` to Haiku for the next round; Sylph deferred PR polish. L3 flagged iteration 32 as a 3.8σ spike over your rolling mean, cache-hit ratio had fallen from 78% to 12% mid-loop. L5 remembered.
 >
 > Time: zero developer interruption. Budget preserved. Cache regression surfaced before it compounded.
+
+## Implementation status (read this before the pitch below)
+
+Pech is Phase 1 / pre-release. The **$-metering path is real and working today**: `PostToolUse` reads the actual Claude API `usage` field, looks it up against `shared/rate-card.json`, and writes ledger rows — L1 forecasting, L2 threshold detection, L3 anomaly detection, and L4 cache-waste measurement all run on that real data.
+
+**Attribution, the event bus, and cross-session learning are not wired up yet**, despite how the sections below read:
+
+- **Per-tier attribution** requires every enchanter-ai sibling plugin (Wixie, Sylph, Emu, …) to set the `ENCHANTED_ATTRIBUTION` env var before dispatching a call. No sibling plugin sets it today — every row currently lands as `orphan: true`. The five-tuple schema and the reader (`shared/scripts/observe.py`) exist; the writer side across the ecosystem does not.
+- **Event-bus peer degradation** (`pech.budget.threshold.crossed` and friends reaching Wixie/Sylph/Emu) is a stub: `shared/scripts/pech_publish.py` fully implements the rate-limiter but only logs to `plugins/budget-watcher/state/published-events.jsonl` — nothing is dispatched to a real enchanted-mcp bus, because that wire protocol doesn't exist yet.
+- **L5 cross-session learning** (`nook-learning`) is scaffolded (schema, accumulator math, PreCompact hook) but has no real multi-session history to learn from until attribution is flowing, so today it accumulates from orphaned/untagged rows.
+
+Treat every "Wixie degrades," "Sylph defers," "per-tier attribution" claim in the sections below as the **design target**, not current behavior. Track wiring status in the repo issues before relying on it for a real budget decision.
 
 ## TL;DR
 
@@ -48,6 +60,7 @@ Not for:
 
 ## Contents
 
+- [Implementation status](#implementation-status-read-this-before-the-pitch-below)
 - [How It Works](#how-it-works)
 - [What Makes Pech Different](#what-makes-pech-different)
 - [The Full Lifecycle](#the-full-lifecycle)
@@ -124,7 +137,7 @@ L5 Gauss Learning persists per-developer spend patterns — `mu` and `sigma` per
 
 ### It runs zero-cloud
 
-Brand invariant: hooks are bash+jq, scripts are Python stdlib. No external runtime dep. Your ledger lives in `plugins/cost-tracker/state/ledger-YYYY-MM.jsonl` on your disk. Rate card is committed JSON refreshed by nightly CI, not an HTTP fetch on the hot path. Cost data never leaves the machine.
+Brand invariant: hooks are bash+jq, scripts are Python stdlib. No external runtime dep. Your ledger lives in `plugins/cost-tracker/state/ledger-YYYY-MM.jsonl` on your disk. Rate card is committed JSON, manually refreshed (no nightly CI job exists yet — see [Implementation status](#implementation-status-read-this-before-the-pitch-below)), not an HTTP fetch on the hot path. Cost data never leaves the machine.
 
 ## The Full Lifecycle
 

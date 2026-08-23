@@ -36,8 +36,9 @@
   },
   "_meta": {
     "source": "https://www.anthropic.com/pricing",
-    "verified_by": "manual seed — replace with CI nightly refresh output",
+    "verified_by": "manual seed — no automated refresh is wired up yet",
     "last_verified": "2026-04-19",
-    "note": "This is a seed card. Confirm against Anthropic's published pricing before production use. The nightly CI job at .github/workflows/refresh-rate-card.yml replaces this with scraped-and-verified values."
+    "stale": true,
+    "note": "This is a manually-seeded card, unverified since 2026-04-19 (see last_verified). There is NO nightly CI job — .github/workflows/refresh-rate-card.yml does not exist yet, despite the rate-card-keeper skill docs describing one. The refresh-rate-card skill (plugins/rate-card-keeper/skills/refresh-rate-card/) exists but must be invoked manually by a developer with fresh, human-verified pricing; nothing runs it automatically. Confirm current rates against Anthropic's published pricing before relying on cost figures in production. load_rate_card.py's staleness gate (shared/scripts/load_rate_card.py) is the actual enforcement: it warns past 90 days and blocks SessionStart past 180 days."
   }
 }
