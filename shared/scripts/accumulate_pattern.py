@@ -3,7 +3,7 @@
 accumulate_pattern.py — L5 Gauss Learning (Pech).
 
 PreCompact hook. Reads the current session's ledger, groups by attribution key,
-updates per-developer patterns in plugins/pech-learning/state/learnings.json with
+updates per-developer patterns in plugins/nook-learning/state/learnings.json with
 slow exponential smoothing (α = 0.05). Exports a snapshot to shared/learnings.json.
 
 Atomic write via temp-rename (Emu-A4 pattern).
@@ -20,7 +20,7 @@ from pathlib import Path
 
 PECH_ROOT = Path(os.environ.get("CLAUDE_PLUGIN_ROOT", Path(__file__).resolve().parent.parent.parent))
 COST_STATE = PECH_ROOT / "plugins" / "cost-tracker" / "state"
-LEARNINGS_FILE = PECH_ROOT / "plugins" / "pech-learning" / "state" / "learnings.json"
+LEARNINGS_FILE = PECH_ROOT / "plugins" / "nook-learning" / "state" / "learnings.json"
 SHARED_LEARNINGS = PECH_ROOT / "shared" / "learnings.json"
 
 ALPHA = 0.05  # slow accumulator — one session doesn't skew patterns

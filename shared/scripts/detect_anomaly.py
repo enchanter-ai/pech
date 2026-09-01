@@ -3,7 +3,7 @@
 detect_anomaly.py — L3 Z-Score Cost Anomaly Detection.
 
 Runs after every ledger row. Computes z-score against the last 30 rows matching the same
-attribution tuple. Falls back to pech-learning's persisted patterns if in-session N < 30.
+attribution tuple. Falls back to nook-learning's persisted patterns if in-session N < 30.
 Emits pech.anomaly.detected when |z| > 3 (both spikes and drops).
 """
 
@@ -19,7 +19,7 @@ from pathlib import Path
 PECH_ROOT = Path(os.environ.get("CLAUDE_PLUGIN_ROOT", Path(__file__).resolve().parent.parent.parent))
 COST_STATE = PECH_ROOT / "plugins" / "cost-tracker" / "state"
 BUDGET_STATE = PECH_ROOT / "plugins" / "budget-watcher" / "state"
-LEARNINGS_FILE = PECH_ROOT / "plugins" / "pech-learning" / "state" / "learnings.json"
+LEARNINGS_FILE = PECH_ROOT / "plugins" / "nook-learning" / "state" / "learnings.json"
 ANOMALIES_LOG = BUDGET_STATE / "anomalies.jsonl"
 
 Z_THRESHOLD = 3.0
@@ -62,7 +62,7 @@ def welford_stats(values: list) -> tuple:
 
 
 def historical_prior(tup: dict) -> dict:
-    """Read pech-learning's persisted pattern. Returns None if not found."""
+    """Read nook-learning's persisted pattern. Returns None if not found."""
     if not LEARNINGS_FILE.exists():
         return None
     try:
