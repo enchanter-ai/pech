@@ -262,7 +262,7 @@ The **PDF audit report** from `/pech-report` includes: session total + forecast 
 
 ## The Science Behind Pech
 
-Every Pech engine is built on a formal mathematical model. Full derivations in [`docs/science/README.md`](docs/science/README.md).
+Every Pech engine is built on a formal mathematical model. Full derivations follow below.
 
 ### Engine L1: Exponential Smoothing Forecast
 
