@@ -31,7 +31,7 @@ phase2_status: "Phase 2 — PDF generation pending (puppeteer + Chrome headless 
    - `plugins/cost-tracker/state/session.json#forecast` (or re-run `forecast-cost` skill)
    - `plugins/budget-watcher/state/thresholds.jsonl` (crossings in scope)
    - `plugins/budget-watcher/state/anomalies.jsonl` (anomalies in scope)
-   - `plugins/pech-learning/state/learnings.json` (for L5 delta)
+   - `plugins/nook-learning/state/learnings.json` (for L5 delta)
 2. **Narrate anomalies.** For each anomaly row, delegate to `budget-watcher/agents/anomaly-triager` (Opus) with the row + surrounding ledger context. Collect the returned narratives.
 3. **Render HTML.** Fill the report template (at `templates/report.html` — inline in this skill's dir for now) with: header, total, forecast block, attribution table, threshold-crossing timeline, anomaly section (with narratives), cache-waste summary, L5 delta.
 4. **Render PDF.** Call `docs/architecture/generate.py --report-html=<html> --out=<pdf-path>` — which internally invokes Chrome headless via `docs/assets/puppeteer.config.json`.

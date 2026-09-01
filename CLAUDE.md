@@ -44,7 +44,7 @@ Pech is **hook-driven**. The observation loop never asks permission — every to
 | `PostToolUse` (any tool) | cost-tracker | Read API `usage` field from the model response; read `ENCHANTED_ATTRIBUTION` env; write ledger row (L1 + L4 measurement) |
 | `PostToolUse` (any tool) | budget-watcher | Increment per-scope counters; check thresholds (L2); check Z-score (L3); publish on crossing |
 | `Stop` | cost-tracker | Finalize session rollup; publish `pech.session.cost.finalized` |
-| `PreCompact` | pech-learning | Persist per-developer spend patterns (L5); export to `shared/learnings.json` |
+| `PreCompact` | nook-learning | Persist per-developer spend patterns (L5); export to `shared/learnings.json` |
 | `/pech-cost [scope]` | cost-query | Display current spend (session by default; `--day`, `--month`) |
 | `/pech-forecast [scope]` | cost-query | Display L1 forecast with confidence band |
 | `/pech-attribute [tool]` | cost-query | Break down last N calls by plugin/tier/model |
@@ -62,7 +62,7 @@ L1 Exponential Smoothing · L2 Budget Boundary Detection · L3 Z-Score Cost Anom
 | L2 | Budget Boundary Detection | budget-watcher | Per-scope counters (session / hour / day / month, per tier, per model). Threshold crossings at 50/80/100% debounced once-per-window. |
 | L3 | Z-Score Cost Anomaly | budget-watcher | Rolling mean μ + σ over last 30 calls of same attribution tuple. Anomaly when `|y − μ| > 3σ`. Alerts on spikes *and* drops (drops signal cache-hit regressions). |
 | L4 | Cache-Waste Measurement | cost-tracker | Cache hit ratio = reads / (reads + writes + misses). Waste = writes with no downstream reads within session. Surfaces as `$X wasted on unread cache writes`. |
-| L5 | Gauss Learning (Pech) | pech-learning | Weighted moving averages over per-developer spend signals (per skill, per session type). Emu-A4 atomic serialization. |
+| L5 | Gauss Learning (Pech) | nook-learning | Weighted moving averages over per-developer spend signals (per skill, per session type). Emu-A4 atomic serialization. |
 
 ## Behavioral contracts
 
@@ -95,7 +95,7 @@ Markers: **[H]** hook-enforced (deterministic) · **[A]** advisory (relies on yo
 | `plugins/budget-watcher/state/budgets.json` | budget-watcher | Per-scope budget ceilings (developer config) |
 | `plugins/budget-watcher/state/thresholds.jsonl` | budget-watcher | Log of threshold crossings (for debounce state + audit) |
 | `plugins/rate-card-keeper/state/rate-card.json` | rate-card-keeper | Per-model rates + modifiers + effective dates |
-| `plugins/pech-learning/state/learnings.json` | pech-learning | Per-developer spend patterns (L5 Gauss Accumulation) |
+| `plugins/nook-learning/state/learnings.json` | nook-learning | Per-developer spend patterns (L5 Gauss Accumulation) |
 | `plugins/<name>/state/precedent-log.md` | all | Self-observed operational failures (see @../vis/packages/core/conduct/precedent.md) |
 | `shared/learnings.json` | exporter | Cross-plugin aggregated learnings |
 

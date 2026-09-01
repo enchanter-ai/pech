@@ -45,7 +45,7 @@ refactor(cost-query): extract common formatter
 test(cost-tracker): add orphan-attribution regression case
 ```
 
-Scopes: `cost-tracker`, `budget-watcher`, `rate-card-keeper`, `pech-learning`, `cost-query`, `full`, `shared`, `docs`, `tests`, or `repo` for top-level.
+Scopes: `cost-tracker`, `budget-watcher`, `rate-card-keeper`, `nook-learning`, `cost-query`, `full`, `shared`, `docs`, `tests`, or `repo` for top-level.
 
 ## Reporting issues
 

@@ -1,5 +1,5 @@
 {
-  "description": "pech-learning hooks — accumulate patterns before compaction wipes in-memory session state. Advisory-only.",
+  "description": "nook-learning hooks — accumulate patterns before compaction wipes in-memory session state. Advisory-only.",
   "hooks": {
     "PreCompact": [
       {

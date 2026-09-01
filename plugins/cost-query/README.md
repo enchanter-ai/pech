@@ -2,7 +2,7 @@
 
 *Part of [Pech](../../README.md) — Cost Ledger for AI-Assisted Development.*
 
-The developer's query surface into Pech's state. Every state file written by `cost-tracker`, `budget-watcher`, and `pech-learning` is readable through these commands — no raw JSON digging required.
+The developer's query surface into Pech's state. Every state file written by `cost-tracker`, `budget-watcher`, and `nook-learning` is readable through these commands — no raw JSON digging required.
 
 ## Slash commands
 

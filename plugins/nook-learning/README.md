@@ -1,8 +1,8 @@
-# pech-learning
+# nook-learning
 
 *Part of [Pech](../../README.md) — Cost Ledger for AI-Assisted Development.*
 
-L5 Gauss Learning — per-developer cost-pattern accumulation. Solves the cold-start problem for L3 anomaly detection: a fresh session has no history, so the first 30 calls can't fire anomalies. pech-learning persists patterns across sessions and seeds the rolling window with historical means.
+L5 Gauss Learning — per-developer cost-pattern accumulation. Solves the cold-start problem for L3 anomaly detection: a fresh session has no history, so the first 30 calls can't fire anomalies. nook-learning persists patterns across sessions and seeds the rolling window with historical means.
 
 ## Engine
 
@@ -13,7 +13,7 @@ L5 Gauss Learning — per-developer cost-pattern accumulation. Solves the cold-s
 ## When it runs
 
 - **`PreCompact` hook** — end-of-session (or compaction trigger), persists accumulated patterns before the session's state is lost
-- **On `pech-learning/accumulate-pattern` skill invocation** — explicit recompute after anomaly-triager sessions
+- **On `nook-learning/accumulate-pattern` skill invocation** — explicit recompute after anomaly-triager sessions
 
 ## What it persists
 
