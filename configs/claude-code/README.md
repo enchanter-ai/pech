@@ -37,7 +37,7 @@ Pech's hooks use bash + jq to parse API responses and write ledger rows. To skip
       "Bash(jq *)",
       "Bash(python3 plugins/cost-tracker/*)",
       "Bash(python3 plugins/budget-watcher/*)",
-      "Bash(python3 plugins/pech-learning/*)"
+      "Bash(python3 plugins/nook-learning/*)"
     ]
   }
 }

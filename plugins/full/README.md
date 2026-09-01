@@ -18,7 +18,7 @@ Pulls in all 5 Pech sub-plugins via one dependency resolution pass.
 | [cost-tracker](../cost-tracker/) | L1 Exponential Smoothing Forecast, L4 Cache-Waste Measurement | Writes ledger + session snapshot + daily rollups; produces forecasts |
 | [budget-watcher](../budget-watcher/) | L2 Budget Boundary Detection, L3 Z-Score Cost Anomaly | Fires debounced threshold events + 3σ anomaly detection |
 | [rate-card-keeper](../rate-card-keeper/) | — | Holds `shared/rate-card.json`; validates schema + staleness at SessionStart |
-| [pech-learning](../pech-learning/) | L5 Gauss Learning (Pech) | Per-developer cost-pattern accumulation across sessions |
+| [nook-learning](../nook-learning/) | L5 Gauss Learning (Pech) | Per-developer cost-pattern accumulation across sessions |
 | [cost-query](../cost-query/) | — | Developer slash commands: `/pech-cost`, `/pech-forecast`, `/pech-attribute`, `/pech-report` |
 
 ## Cherry-picking
