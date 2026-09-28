@@ -3,8 +3,8 @@
   "description": "Renderer toolchain for {{PluginName}} architecture diagrams and math. Dev-only — never imported at runtime.",
   "private": true,
   "devDependencies": {
-    "@mermaid-js/mermaid-cli": "^11.0.0",
+    "@mermaid-js/mermaid-cli": "^12.0.0",
     "mathjax-full": "^3.2.1",
-    "puppeteer": "^23.0.0"
+    "puppeteer": "^25.12.0"
   }
 }
